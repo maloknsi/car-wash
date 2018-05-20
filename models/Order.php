@@ -23,14 +23,14 @@ use Yii;
  * @property Service $service
  * @property User $user
  */
-class UserServiceBox extends \yii\db\ActiveRecord
+class Order extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'user_service_box';
+        return 'order';
     }
 
     /**

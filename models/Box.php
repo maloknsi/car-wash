@@ -55,8 +55,8 @@ class Box extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUserServices()
+    public function getOrders()
     {
-        return $this->hasMany(UserService::class, ['box_id' => 'id']);
+        return $this->hasMany(Order::class, ['box_id' => 'id']);
     }
 }

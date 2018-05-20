@@ -54,8 +54,8 @@ class Service extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUserServices()
+    public function getOrders()
     {
-        return $this->hasMany(UserService::class, ['service_id' => 'id']);
+        return $this->hasMany(Order::class, ['service_id' => 'id']);
     }
 }

@@ -120,9 +120,9 @@ class User extends ActiveRecord implements IdentityInterface
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getUserServices()
+	public function getOrders()
 	{
-		return $this->hasMany(UserService::class, ['user_id' => 'id']);
+		return $this->hasMany(Order::class, ['user_id' => 'id']);
 	}
 
 	/**

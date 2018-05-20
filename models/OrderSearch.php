@@ -8,7 +8,7 @@ use yii\data\ActiveDataProvider;
 /**
  * UserServiceSearch represents the model behind the search form of `app\models\UserService`.
  */
-class UserServiceBoxSearch extends UserServiceBox
+class OrderSearch extends Order
 {
     /**
      * {@inheritdoc}
@@ -40,7 +40,7 @@ class UserServiceBoxSearch extends UserServiceBox
      */
     public function search($params)
     {
-        $query = UserServiceBox::find();
+        $query = Order::find();
 
         // add conditions that should always apply here
 

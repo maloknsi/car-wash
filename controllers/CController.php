@@ -87,7 +87,7 @@ abstract class CController extends Controller
 					'label' => 'Управление', 'url' => 'javascript:;',
 					'submenuOptions' => ['class' => 'sub-menu'],
 					'items' => [
-						['label' => 'Заказы', 'url' => ['/user-service']],
+						['label' => 'Заказы', 'url' => ['/order']],
 						['label' => 'Отзывы', 'url' => ['/review']],
 						['label' => 'Новости', 'url' => ['/news']],
 						['label' => 'Пользователи', 'url' => ['/user']],

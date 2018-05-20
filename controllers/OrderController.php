@@ -2,30 +2,30 @@
 
 namespace app\controllers;
 
-use app\models\UserServiceBox;
-use app\models\UserServiceBoxSearch;
+use app\models\Order;
+use app\models\OrderSearch;
 use yii\web\NotFoundHttpException;
 
 /**
  * UserServiceController implements the CRUD actions for UserService model.
  */
-class UserServiceController extends CAdminController
+class OrderController extends CAdminController
 {
 	public function getNewModel($isModelSearch = false)
 	{
-		return $isModelSearch ? new UserServiceBoxSearch() : new UserServiceBox();
+		return $isModelSearch ? new OrderSearch() : new Order();
 	}
 
 	/**
 	 * Finds the UserService model based on its primary key value.
 	 * If the model is not found, a 404 HTTP exception will be thrown.
 	 * @param integer $id
-	 * @return UserServiceBox the loaded model
+	 * @return Order the loaded model
 	 * @throws NotFoundHttpException if the model cannot be found
 	 */
 	protected function findModel($id)
 	{
-		if (($model = UserServiceBox::findOne($id)) !== null) {
+		if (($model = Order::findOne($id)) !== null) {
 			return $model;
 		}
 

@@ -1,13 +1,13 @@
 <?php
 
 use app\models\Box;
-use app\models\UserServiceBox;
+use app\models\Order;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\UserServiceBoxSearch */
+/* @var $searchModel app\models\OrderSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 ?>
@@ -28,21 +28,21 @@ use yii\widgets\Pjax;
 			[
 				'attribute' => 'service_id',
 				'content' => function ($data) {
-					/** @var $data UserServiceBox */
+					/** @var $data Order */
 					return $data->service->title;
 				},
 			],
 			[
 				'attribute' => 'user_id',
 				'content' => function ($data) {
-					/** @var $data UserServiceBox */
+					/** @var $data Order */
 					return $data->user->phone;
 				},
 			],
 			[
 				'attribute' => 'box_id',
 				'content' => function ($data) {
-					/** @var $data UserServiceBox */
+					/** @var $data Order */
 					return $data->box->title;
 				},
 			],
@@ -79,7 +79,7 @@ use yii\widgets\Pjax;
 				'contentOptions'=>['style'=> 'text-align: center'],
 				'buttons' => [
 					'update' => function ($url, $model, $key) {
-						/* @var $model UserServiceBox */
+						/* @var $model Order */
 						return Html::a('<span class="glyphicon glyphicon-pencil"></span>', '#', [
 							'title' => 'Редактировать',
 							'class' => 'btn-show-modal-form',
@@ -94,7 +94,7 @@ use yii\widgets\Pjax;
 				'contentOptions'=>['style'=> 'text-align: center'],
 				'buttons' => [
 					'delete' => function ($url, $model) {
-						/** @var $model UserServiceBox */
+						/** @var $model Order */
 						return Html::a('<span class="glyphicon glyphicon-trash button-action-delete"></span>', 'javascript:;', [
 							'title' => 'Удалить этот элемент',
 							'class' => 'btn-show-confirm-form',
