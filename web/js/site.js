@@ -1,28 +1,78 @@
-jQuery(document).ready(function () {
+jQuery(function($) {'use strict',
 
-	$(document).ajaxError(function( event, jqxhr, settings, exception ) {
-		gritterAdd('Error', exception, 'gritter-danger');
-	});
+	//Countdown js
+	$("#countdown").countdown({
+			date: "10 july 2014 12:00:00",
+			format: "on"
+		},
 
-	$(document).on("click", ".btn-show-modal-form", function () {
-		var buttonCalled = $(this),
-			modalForm = buttonCalled.attr('data-modal-form') ? buttonCalled.attr('data-modal-form') : '#modal-form-ajax',
-			actionUrl = buttonCalled.attr('data-action-url');
-		$(modalForm).find('.modal-header h4').html(buttonCalled.attr('title'));
-		$(modalForm).find('.modal-content .modal-body').html('Загрузка...');
-		$(modalForm).modal('show')
-			.find('.modal-content .modal-body')
-			.load(actionUrl, function(response, status, xhr) {
-				$(modalForm).find('.modal-active-form').attr('data-modal-form',modalForm);
-				if (status == 'error') {
-					$(modalForm).find('.modal-content .modal-body').html('Ошибка:' + xhr.status + " " + xhr.statusText);
+		function() {
+			// callback function
+		});
+
+
+
+	//Scroll Menu
+
+	function menuToggle()
+	{
+		var windowWidth = $(window).width();
+
+		if(windowWidth > 767 ){
+			$(window).on('scroll', function(){
+				if( $(window).scrollTop()>405 ){
+					$('.main-nav').addClass('fixed-menu animated slideInDown');
+				} else {
+					$('.main-nav').removeClass('fixed-menu animated slideInDown');
 				}
 			});
+		}else{
+
+			$('.main-nav').addClass('fixed-menu animated slideInDown');
+
+		}
+	}
+
+	menuToggle();
+
+
+	// Carousel Auto Slide Off
+	$('#event-carousel, #twitter-feed, #sponsor-carousel ').carousel({
+		interval: false
 	});
 
-	$(document).on("beforeSubmit", ".modal-active-form", function () {
+
+	// Contact form validation
+	var form = $('.contact-form');
+	form.submit(function () {'use strict',
+		$this = $(this);
+		$.post($(this).attr('action'), function(data) {
+			$this.prev().text(data.message).fadeIn().delay(3000).fadeOut();
+		},'json');
+		return false;
+	});
+
+	$( window ).resize(function() {
+		menuToggle();
+	});
+
+	$('.main-nav ul').onePageNav({
+		currentClass: 'active',
+		changeHash: false,
+		scrollSpeed: 900,
+		scrollOffset: 0,
+		scrollThreshold: 0.3,
+		filter: ':not(.no-scroll)'
+	});
+});
+
+
+jQuery(document).ready(function () {
+	$(document).on("beforeSubmit", ".modal-active-form-site#login-form", function () {
 		var form = $(this),
 			modalForm = form.attr('data-modal-form');
+		if ($(modalForm).hasClass('disabled')) return false;
+		$(modalForm).addClass('disabled');
 		jQuery.ajax({
 			url: form.attr('action'),
 			type: "POST",
@@ -34,73 +84,27 @@ jQuery(document).ready(function () {
 			success: function(response) {
 				if (response.error){
 					form.find('.error-summary').html(response.error).show();
-				}else{
+					$(modalForm).removeClass('disabled');
+				} else if(response.notify){
+					form.find('.error-summary').html(response.notify).show();
+					form.find('#panel_input_phone').hide();
+					form.find('#panel_input_sms_code').show();
+					$(modalForm).removeClass('disabled');
+				} else {
+					$(modalForm).removeClass('disabled');
 					$(modalForm).find('.modal-content .modal-body').html('');
 					if ($(".grid-view").length){
 						$(".grid-view").yiiGridView("applyFilter");
 					}
-					gritterAdd('Выполнено!', response.data, 'gritter-success');
+					gritterAdd('Выполнено!', '', 'gritter-success');
+					$('div.header-top #block_user_guest').hide();
+					$('div.header-top #block_user_authorized').show().find('span').html(response.data);
 					setTimeout(function() {
-						$(modalForm).modal('hide');
+						$('#modal-form-ajax').modal('hide');
 					}, 500);
 				}
 			}
 		});
 		return false;
 	});
-	$(document).on("click", ".btn-show-confirm-form", function () {
-		var buttonCalled = $(this);
-		bootbox.dialog({
-			message: buttonCalled.attr('title')+'?',
-			title: "Подтвердите",
-			buttons: {
-				success: {
-					label: "Да",
-					className: "btn-danger",
-					callback: function() {
-						jQuery.ajax({
-							url: buttonCalled.attr('data-action-url'),
-							type: "POST",
-							dataType: "json",
-							data: false,
-							cache: false,
-							contentType: false,
-							processData: false,
-							success: function(response) {
-								if (response.error){
-									gritterAdd('Ошибка!', response.error, 'gritter-success');
-								}else{
-									gritterAdd('Выполнено!', response.data, 'gritter-success');
-									if ($(".grid-view").length){
-										$(".grid-view").yiiGridView("applyFilter");
-									}
-								}
-							}
-						});
-					}
-				},
-				danger: {
-					label: "Нет",
-					className: "btn-success",
-					callback: function() {
-					}
-				}
-			}
-		});
-	});
-
-	$(document).on("click", ".btn-execute-ajax", function () {
-		var buttonCalled = $(this);
-		sendPostAjax(buttonCalled.attr('data-action-url'), {}, function () {
-			if (this.error) {
-				showErrorAlert(this.error);
-			} else if (this.data) {
-				showSuccessAlert(this.data);
-				if ($(".grid-view").length){
-					$(".grid-view").yiiGridView("applyFilter");
-				}
-			}
-		});
-	});
-
 });

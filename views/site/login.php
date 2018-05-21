@@ -6,42 +6,47 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use yii\helpers\Url;
 
-$this->title = 'Login';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-login">
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>Please fill out the following fields to login:</p>
-
-    <?php $form = ActiveForm::begin([
-        'id' => 'login-form',
-        'layout' => 'horizontal',
-        'fieldConfig' => [
-            'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
-            'labelOptions' => ['class' => 'col-lg-1 control-label'],
-        ],
-    ]); ?>
-
-        <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
-
-        <?= $form->field($model, 'password')->passwordInput() ?>
-
-        <?= $form->field($model, 'rememberMe')->checkbox([
-            'template' => "<div class=\"col-lg-offset-1 col-lg-3\">{input} {label}</div>\n<div class=\"col-lg-8\">{error}</div>",
-        ]) ?>
-
-        <div class="form-group">
-            <div class="col-lg-offset-1 col-lg-11">
-                <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
-            </div>
-        </div>
-
-    <?php ActiveForm::end(); ?>
-
-    <div class="col-lg-offset-1" style="color:#999;">
-        You may login with <strong>admin/admin</strong> or <strong>demo/demo</strong>.<br>
-        To modify the username/password, please check out the code <code>app\models\User::$users</code>.
-    </div>
+<?php $form = ActiveForm::begin([
+	'id' => 'login-form',
+	'enableAjaxValidation' => false,
+	'enableClientValidation' => false,
+	'action' => ['/login'],
+	'options' => ['enctype' => 'multipart/form-data', 'class' => 'modal-active-form-site'],
+]); ?>
+<div class="portlet-body">
+	<div class="panel">
+		<div class="panel panel-info" id="panel_input_phone">
+			<div class="panel-heading">Введите свой номер телефона</div>
+			<div class="panel-body">
+				<div class="col-xs-12">
+					<?= $form->field($model, 'smsPhone')->widget(\yii\widgets\MaskedInput::className(), [
+						'mask' => '+380(99) 999-9999',
+					]) ?>
+				</div>
+			</div>
+		</div>
+		<div class="panel panel-danger"  id="panel_input_sms_code" style="display: none;">
+			<div class="panel-heading">Введите пароль подтверждения из SMS</div>
+			<div class="panel-body">
+				<div class="col-xs-12">
+					<?= $form->field($model, 'smsCode')->textInput(['maxlength' => true]) ?>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 col-md-12 col-lg-12 ">
+			<?= $form->errorSummary($model); ?>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<div class="form-group">
+			<?= Html::submitButton('Войти', ['value' => Url::to(['/login']), 'title' => 'Подтвердить действие', 'class' => 'showModalButton btn btn-success', 'name' => 'login-button']); ?>
+			<?= Html::button('Закрыть', ['class' => 'btn grey-mint', 'data-dismiss' => "modal"]); ?>
+		</div>
+	</div>
+	<?php ActiveForm::end(); ?>
 </div>

@@ -4,8 +4,10 @@ namespace app\controllers;
 use app\models\User;
 use app\components\AjaxResult;
 use Yii;
-use yii\helpers\BaseVarDumper;
+use yii\filters\AccessControl;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
+use yii\helpers\Url;
 use yii\web\Controller;
 
 abstract class CController extends Controller
@@ -27,8 +29,34 @@ abstract class CController extends Controller
 	 * название сайта
 	 */
 	public $title = 'NEXUS';
+
 	/** @var $ajaxResult AjaxResult */
 	public $ajaxResult;
+
+	public function behaviors()
+	{
+		return ArrayHelper::merge(
+			parent::behaviors(),
+			[
+				'access' => [
+					'class' => AccessControl::class,
+					'only' => ['login', 'logout'],
+					'rules' => [
+						[
+							'allow' => true,
+							'actions' => ['login'],
+							'roles' => ['?'],
+						],
+						[
+							'allow' => true,
+							'actions' => ['logout'],
+							'roles' => ['@'],
+						],
+					],
+				],
+			]
+		);
+	}
 
 	/**
 	 * @return array
@@ -52,6 +80,7 @@ abstract class CController extends Controller
 	 */
 	public function beforeAction($action)
 	{
+		#echo "<pre>";var_dump($this->behaviors());die();
 		if (!Yii::$app->request->isAjax) {
 			$this->initMenu();
 		}
@@ -79,7 +108,7 @@ abstract class CController extends Controller
 	public function initMenu()
 	{
 		if (!count($this->menuItems)){
-
+			// init menu items
 			$menuItems =[
 				'api-push'=> ['label' => 'Статистика Api Push', 'url' => ['api-push/index']],
 
@@ -103,21 +132,17 @@ abstract class CController extends Controller
 					]
 				],
 			];
-			// create menu items
+			// set menu items for users
 			if (!Yii::$app->user->isGuest) {
-
-				if (User::checkAccess([User::ROLE_ADMIN,User::ROLE_USER])) {
-					$this->menuItems['task-cron'] = $menuItems['task-cron'];
+				if (User::checkAccess([User::ROLE_ADMIN, User::ROLE_USER, User::ROLE_OPERATOR])) {
+					$this->menuItems['api-push'] = $menuItems['api-push'];
 				}
 				if (User::checkAccess([User::ROLE_ADMIN])) {
-					$this->menuItems['task-soap'] = $menuItems['task-soap'];
-					$this->menuItems['task-report'] = $menuItems['task-report'];
-					$this->menuItems['api-push'] = $menuItems['api-push'];
+					$this->menuItems['control'] = $menuItems['control'];
 					$this->menuItems['config'] = $menuItems['config'];
 				}
 			}
-			$this->menuItems['control'] = $menuItems['control'];
-			$this->menuItems['config'] = $menuItems['config'];
+			// set menu 'Login'
 			if (!Yii::$app->user->isGuest) {
 				$this->menuItems['authorization'] = [
 					'label' => 'Выход (' . Yii::$app->user->identity->username . ')',
@@ -127,8 +152,14 @@ abstract class CController extends Controller
 			} else {
 				$this->menuItems['authorization'] = [
 					'label' => 'Вход',
-					'url' => ['/site/login'],
-					'linkOptions' => ['data-method' => 'post']
+					'url' => '#',
+					'linkOptions' => [
+						'data-method' => 'post',
+						'title' => 'Авторизация',
+						'class' => 'btn-show-modal-form',
+						'data-action-url' => Url::to(['/login']),
+					]
+
 				];
 			}
 

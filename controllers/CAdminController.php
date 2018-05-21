@@ -15,6 +15,8 @@ use yii\widgets\ActiveForm;
 
 abstract class CAdminController extends CController
 {
+	public $layout = 'admin';
+
 	public function behaviors()
 	{
 		return ArrayHelper::merge(
@@ -22,25 +24,12 @@ abstract class CAdminController extends CController
 			[
 				'access' => [
 					'class' => AccessControl::class,
+					'only' => ['index' ,'edit','validate','save','delete'],
 					'rules' => [
 						[
-							'actions' => ['index'],
+							'actions' => ['index' ,'edit','validate','save','delete'],
 							'allow' => true,
-							//'roles' => ['admin'],
-						],
-						[
-							'allow' => true,
-							'actions' => ['login'],
-							'roles' => ['@','?'],
-						],
-						[
-							'allow' => true,
-							'actions' => ['logout','error'],
-							'roles' => ['@'],
-						],
-						[
-							'allow' => true,
-							//'roles' => ['admin'],
+							'roles' => ['admin'],
 						],
 					],
 				],

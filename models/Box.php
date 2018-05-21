@@ -13,7 +13,7 @@ use Yii;
  * @property string $time_start
  * @property string $time_end
  *
- * @property UserService[] $userServices
+ * @property Order[] $getOrders
  */
 class Box extends \yii\db\ActiveRecord
 {

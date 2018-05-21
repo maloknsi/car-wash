@@ -14,6 +14,9 @@ use yii\widgets\Pjax;
 
 	<?php Pjax::begin(['id' => 'review-grid', 'timeout' => 240000, 'enablePushState' => false]); ?>
 	<?= GridView::widget([
+		'layout' => "{summary}\n{pager}\n{items}\n{pager}\n{summary}",
+		'formatter' => ['class' => 'yii\i18n\Formatter', 'nullDisplay' => '-'],
+		'options' => ['class' => ['table-report-detailed','grid-view']],
 		'dataProvider' => $dataProvider,
 		'filterModel' => $searchModel,
 		'columns' => [

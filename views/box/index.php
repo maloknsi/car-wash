@@ -20,8 +20,11 @@ use yii\widgets\Pjax;
 	]); ?>
 
     <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+		'layout' => "{summary}\n{pager}\n{items}\n{pager}\n{summary}",
+		'formatter' => ['class' => 'yii\i18n\Formatter', 'nullDisplay' => '-'],
+		'options' => ['class' => ['table-report-detailed','grid-view']],
+		'dataProvider' => $dataProvider,
+		'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 

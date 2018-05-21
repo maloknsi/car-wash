@@ -1,11 +1,12 @@
 <?php
 
-use app\models\Box;
 use app\models\Order;
+use kartik\time\TimePicker;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\OrderSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -21,6 +22,9 @@ use yii\widgets\Pjax;
 	]); ?>
 
 	<?= GridView::widget([
+		'layout' => "{summary}\n{pager}\n{items}\n{pager}\n{summary}",
+		'formatter' => ['class' => 'yii\i18n\Formatter', 'nullDisplay' => '-'],
+		'options' => ['class' => ['table-report-detailed', 'grid-view']],
 		'dataProvider' => $dataProvider,
 		'filterModel' => $searchModel,
 		'columns' => [
@@ -68,6 +72,25 @@ use yii\widgets\Pjax;
 				]),
 				'format' => 'html',
 			],
+			[
+				'attribute' => 'time_start',
+				'filter' => TimePicker::widget([
+					'model' => $searchModel,
+					'attribute' => 'time_start',
+					'pluginOptions' => [
+						'showSeconds' => false,
+						'template' => false
+					],
+					'options' => [
+						'readonly' => false,
+					],
+					'addonOptions' => [
+						'asButton' => false,
+						'buttonOptions' => ['class' => 'btn btn-info']
+					]
+				]),
+				'headerOptions' => ['style' => 'min-width: 155px;'],
+			],
 			'time_start',
 			'time_end',
 			'money_cost',
@@ -76,7 +99,7 @@ use yii\widgets\Pjax;
 			[
 				'class' => 'yii\grid\ActionColumn',
 				'template' => '{update}',
-				'contentOptions'=>['style'=> 'text-align: center'],
+				'contentOptions' => ['style' => 'text-align: center'],
 				'buttons' => [
 					'update' => function ($url, $model, $key) {
 						/* @var $model Order */
@@ -91,7 +114,7 @@ use yii\widgets\Pjax;
 			[
 				'class' => 'yii\grid\ActionColumn',
 				'template' => '{delete1}',
-				'contentOptions'=>['style'=> 'text-align: center'],
+				'contentOptions' => ['style' => 'text-align: center'],
 				'buttons' => [
 					'delete' => function ($url, $model) {
 						/** @var $model Order */

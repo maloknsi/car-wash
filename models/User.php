@@ -30,7 +30,7 @@ use yii\web\IdentityInterface;
  *
  * @property UserBlocking[] $userBlockings
  * @property UserReview[] $userReviews
- * @property UserService[] $userServices
+ * @property Order[] $orders
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -63,7 +63,7 @@ class User extends ActiveRecord implements IdentityInterface
 			[['car_number'], 'string', 'max' => 10],
 			[['auth_key'], 'string', 'max' => 32],
 			[['email_confirm_token', 'password_hash', 'password_reset_token', 'email'], 'string', 'max' => 255],
-			[['user_name', 'user_email', 'user_phone'], 'requiredOneMoreFields'],
+			[['last_name', 'first_name', 'email', 'phone'], 'requiredOneMoreFields'],
 		];
 	}
 
@@ -277,5 +277,12 @@ class User extends ActiveRecord implements IdentityInterface
 			$result = true;
 		}
 		return $result;
+	}
+
+	public function save($runValidation = true, $attributeNames = null)
+	{
+		$this->username = trim(($this->first_name ? $this->first_name : '') .
+			($this->last_name ? " {$this->last_name}" : '') . ($this->phone ? " [{$this->phone}]" : ''));
+		return parent::save($runValidation, $attributeNames);
 	}
 }

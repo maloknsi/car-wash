@@ -69,7 +69,7 @@ class Review extends \yii\db\ActiveRecord
 	public function requiredOneMoreFields($attribute_name, $params)
 	{
 		if (empty($this->user_name) && empty($this->user_email) && empty($this->user_phone)) {
-			$this->addError($attribute_name, 'Не все данные даполнены');
+			$this->addError($attribute_name, 'Не все данные заполнены');
 			return false;
 		}
 		return true;

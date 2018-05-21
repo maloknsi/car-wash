@@ -1,8 +1,8 @@
 <?php
 //https://github.com/hiqdev/yii2-theme-sailor
 //https://yiiframework.ru/forum/viewtopic.php?t=43674
-$params = require __DIR__ . '/params.php';
-$db = require __DIR__ . '/db.php';
+$db = yii\helpers\ArrayHelper::merge(require __DIR__ . '/db.php',(file_exists(__DIR__ . '/db-local.php')?(require __DIR__ . '/db-local.php'):[]));
+$params = yii\helpers\ArrayHelper::merge(require __DIR__ . '/params.php',(file_exists(__DIR__ . '/params-local.php')?(require __DIR__ . '/params-local.php'):[]));
 
 $config = [
     'id' => 'basic',
@@ -33,7 +33,7 @@ $config = [
             'enableAutoLogin' => true,
         ],
         'errorHandler' => [
-            'errorAction' => 'site/error',
+            'errorAction' => 'site/error-page',
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
@@ -58,7 +58,7 @@ $config = [
             'rules' => [
 	            '/logout' => '/site/logout',
 	            '/login' => '/site/login',
-	            '/log-auth' => '/security-authorization/index',
+	            '/' => 'site/index',
 
 	            '<controller>/<action>/<id>' => '<controller>/<action>',
 	            '<controller>/<action>' => '<controller>/<action>'
