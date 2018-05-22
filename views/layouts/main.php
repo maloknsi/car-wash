@@ -40,7 +40,7 @@ $this->title = $this->context->title;
 						</span>
 					</div>
 				</div>
-				<div class="row">
+				<div class="row" id="menu">
 					<div class="navbar-header">
 						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
 							<span class="sr-only">Toggle navigation</span>
@@ -58,8 +58,8 @@ $this->title = $this->context->title;
 							<li class="scroll"><a href="#explore">Забронировать</a></li>
 							<li class="scroll"><a href="#event">Новости</a></li>
 							<li class="scroll"><a href="#about">О нас</a></li>
-							<li class="no-scroll"><a href="#twitter">Отзывы</a></li>
-							<li class="no-scroll"><a href="#sponsor">Услуги</a></li>
+							<li class="scroll"><a href="#twitter">Отзывы</a></li>
+							<li class="scroll"><a href="#sponsor">Услуги</a></li>
 							<li class="scroll"><a href="#contact">Контакты</a></li>
 						</ul>
 					</div>
@@ -83,7 +83,7 @@ $this->title = $this->context->title;
 						<h2>Комплекс «Стандарт»</h2>
 						<h4>мойка авто, воск, сушка, <br>
 							пылесос + влажная уборка салона</h4>
-						<a href="#sponsor">наши услуги <i class="fa fa-angle-right"></i></a>
+						<a href="#sponsor" class="scroll">наши услуги <i class="fa fa-angle-right"></i></a>
 					</div>
 				</div>
 				<div class="item">
@@ -94,7 +94,7 @@ $this->title = $this->context->title;
 							влажная уборка салона, обезж. стекол, <br>
 							чистка колёсных дисков, кондиционер кожи салона,<br>
 							полироль пластика салона, чернение резины</h4>
-						<a href="#sponsor">наши услуги <i class="fa fa-angle-right"></i></a>
+						<a href="#sponsor" class="scroll">наши услуги <i class="fa fa-angle-right"></i></a>
 					</div>
 				</div>
 				<div class="item">
@@ -104,7 +104,7 @@ $this->title = $this->context->title;
 						<h4>мойка авто, воск, сушка, пылесос, влажная уборка салона,  <br>
 							обезжир. стекол внутри снаружи,  <br>
 							обработка пластиковых деталей салона, чернение резины</h4>
-						<a href="#sponsor">наши услуги <i class="fa fa-angle-right"></i></a>
+						<a href="#sponsor" class="scroll">наши услуги <i class="fa fa-angle-right"></i></a>
 					</div>
 				</div>
 			</div>
