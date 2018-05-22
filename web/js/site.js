@@ -42,16 +42,6 @@ jQuery(function($) {'use strict',
 	});
 
 
-	// Contact form validation
-	var form = $('.contact-form');
-	form.submit(function () {'use strict',
-		$this = $(this);
-		$.post($(this).attr('action'), function(data) {
-			$this.prev().text(data.message).fadeIn().delay(3000).fadeOut();
-		},'json');
-		return false;
-	});
-
 	$( window ).resize(function() {
 		menuToggle();
 	});
@@ -91,6 +81,9 @@ jQuery(document).ready(function () {
 					form.find('#panel_input_sms_code').show();
 					$(modalForm).removeClass('disabled');
 				} else {
+					if (response.data == 'admin'){
+						window.location = '/user'
+					}
 					$(modalForm).removeClass('disabled');
 					$(modalForm).find('.modal-content .modal-body').html('');
 					if ($(".grid-view").length){

@@ -33,7 +33,7 @@ $this->title = $this->context->title;
 						]) ?>
 						</span>
 						<span id="block_user_authorized" style="display:<?= !Yii::$app->user->isGuest ? 'block' : 'none' ?>">
-							<i class="fa fa-user-md"></i><span style="margin-left: 5px"><?= Yii::$app->user->identity->username ?></span>
+							<a href="<?= Url::to(["/user"])?>"><i class="fa fa-user-md"></i><span style="margin-left: 5px"><?= !Yii::$app->user->isGuest ? Yii::$app->user->identity->username : '' ?></span></a>
 							<?= Html::a('<i class="fa fa-sign-out"></i>', Url::to(['/logout']), [
 								'title' => 'Выйти',
 							]) ?>
@@ -55,11 +55,11 @@ $this->title = $this->context->title;
 					<div class="collapse navbar-collapse">
 						<ul class="nav navbar-nav navbar-right">
 							<li class="scroll active"><a href="#home">Главная</a></li>
-							<li class="scroll"><a href="#box_record">Запись</a></li>
-							<li class="scroll"><a href="#news">Новости</a></li>
+							<li class="scroll"><a href="#explore">Забронировать</a></li>
+							<li class="scroll"><a href="#event">Новости</a></li>
 							<li class="scroll"><a href="#about">О нас</a></li>
-							<li class="no-scroll"><a href="#review">Отзывы</a></li>
-							<li class="no-scroll"><a href="#services">Услуги</a></li>
+							<li class="no-scroll"><a href="#twitter">Отзывы</a></li>
+							<li class="no-scroll"><a href="#sponsor">Услуги</a></li>
 							<li class="scroll"><a href="#contact">Контакты</a></li>
 						</ul>
 					</div>
@@ -80,25 +80,31 @@ $this->title = $this->context->title;
 				<div class="item active">
 					<img class="img-responsive" src="/images/slider/bg1.jpg" alt="slider">
 					<div class="carousel-caption">
-						<h2>register for our next event </h2>
-						<h4>full event package only @$199</h4>
-						<a href="#contact">GRAB YOUR TICKETS <i class="fa fa-angle-right"></i></a>
+						<h2>Комплекс «Стандарт»</h2>
+						<h4>мойка авто, воск, сушка, <br>
+							пылесос + влажная уборка салона</h4>
+						<a href="#sponsor">наши услуги <i class="fa fa-angle-right"></i></a>
 					</div>
 				</div>
 				<div class="item">
 					<img class="img-responsive" src="/images/slider/bg2.jpg" alt="slider">
 					<div class="carousel-caption">
-						<h2>register for our next event </h2>
-						<h4>full event package only @$199</h4>
-						<a href="#contact">GRAB YOUR TICKETS <i class="fa fa-angle-right"></i></a>
+						<h2>Комплекс «V.I.P»</h2>
+						<h4>мойка авто б/к +ручная, полимер, пылесос, <br>
+							влажная уборка салона, обезж. стекол, <br>
+							чистка колёсных дисков, кондиционер кожи салона,<br>
+							полироль пластика салона, чернение резины</h4>
+						<a href="#sponsor">наши услуги <i class="fa fa-angle-right"></i></a>
 					</div>
 				</div>
 				<div class="item">
 					<img class="img-responsive" src="/images/slider/bg3.jpg" alt="slider">
 					<div class="carousel-caption">
-						<h2>register for our next event </h2>
-						<h4>full event package only @$199</h4>
-						<a href="#contact">GRAB YOUR TICKETS <i class="fa fa-angle-right"></i></a>
+						<h2>Комплекс «Люкс»</h2>
+						<h4>мойка авто, воск, сушка, пылесос, влажная уборка салона,  <br>
+							обезжир. стекол внутри снаружи,  <br>
+							обработка пластиковых деталей салона, чернение резины</h4>
+						<a href="#sponsor">наши услуги <i class="fa fa-angle-right"></i></a>
 					</div>
 				</div>
 			</div>
@@ -106,7 +112,7 @@ $this->title = $this->context->title;
 	</section>
 	<!--/#home-->
 
-	<section id="box_record">
+	<section id="explore">
 		<div class="container">
 			<div class="row">
 				<div class="watch">
@@ -115,34 +121,11 @@ $this->title = $this->context->title;
 				<div class="col-md-4 col-md-offset-2 col-sm-5">
 					<h2>our next event in</h2>
 				</div>
-				<div class="col-sm-7 col-md-6">
-					<ul id="countdown">
-						<li>
-							<span class="days time-font">00</span>
-							<p>days </p>
-						</li>
-						<li>
-							<span class="hours time-font">00</span>
-							<p class="">hours </p>
-						</li>
-						<li>
-							<span class="minutes time-font">00</span>
-							<p class="">minutes</p>
-						</li>
-						<li>
-							<span class="seconds time-font">00</span>
-							<p class="">seconds</p>
-						</li>
-					</ul>
-				</div>
-			</div>
-			<div class="cart">
-				<a href="#"><i class="fa fa-shopping-cart"></i> <span>Purchase Tickets</span></a>
 			</div>
 		</div>
 	</section><!--/#box_record-->
 
-	<section id="news">
+	<section id="event">
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-12 col-md-9">
@@ -164,12 +147,12 @@ $this->title = $this->context->title;
 
 	<section id="about">
 		<div class="guitar2">
-			<img class="img-responsive" src="/images/guitar2.jpg" alt="guitar">
+			<img class="img-responsive" src="/images/guitar2.png" alt="guitar">
 		</div>
 			<?php echo app\widgets\SiteAboutWidget::widget() ?>
 	</section><!--/#about-->
 
-	<section id="review">
+	<section id="twitter">
 		<div id="twitter-feed" class="carousel slide" data-interval="false">
 			<div class="twit">
 				<img class="img-responsive" src="/images/twit.png" alt="twit">
@@ -184,37 +167,18 @@ $this->title = $this->context->title;
 				</div>
 			</div>
 		</div>
-	</section><!--/#review-feed-->
+	</section><!--/#twitter-feed-->
 
-	<section id="services">
+	<section id="sponsor">
 		<div id="sponsor-carousel" class="carousel slide" data-interval="false">
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-10">
-						<h2>Sponsors</h2>
+						<h2>Наши услуги</h2>
 						<a class="sponsor-control-left" href="#sponsor-carousel" data-slide="prev"><i class="fa fa-angle-left"></i></a>
 						<a class="sponsor-control-right" href="#sponsor-carousel" data-slide="next"><i class="fa fa-angle-right"></i></a>
 						<div class="carousel-inner">
-							<div class="item active">
-								<ul>
-									<li><a href="#"><img class="img-responsive" src="/images/sponsor/sponsor1.png" alt=""></a></li>
-									<li><a href="#"><img class="img-responsive" src="/images/sponsor/sponsor2.png" alt=""></a></li>
-									<li><a href="#"><img class="img-responsive" src="/images/sponsor/sponsor3.png" alt=""></a></li>
-									<li><a href="#"><img class="img-responsive" src="/images/sponsor/sponsor4.png" alt=""></a></li>
-									<li><a href="#"><img class="img-responsive" src="/images/sponsor/sponsor5.png" alt=""></a></li>
-									<li><a href="#"><img class="img-responsive" src="/images/sponsor/sponsor6.png" alt=""></a></li>
-								</ul>
-							</div>
-							<div class="item">
-								<ul>
-									<li><a href="#"><img class="img-responsive" src="/images/sponsor/sponsor6.png" alt=""></a></li>
-									<li><a href="#"><img class="img-responsive" src="/images/sponsor/sponsor5.png" alt=""></a></li>
-									<li><a href="#"><img class="img-responsive" src="/images/sponsor/sponsor4.png" alt=""></a></li>
-									<li><a href="#"><img class="img-responsive" src="/images/sponsor/sponsor3.png" alt=""></a></li>
-									<li><a href="#"><img class="img-responsive" src="/images/sponsor/sponsor2.png" alt=""></a></li>
-									<li><a href="#"><img class="img-responsive" src="/images/sponsor/sponsor1.png" alt=""></a></li>
-								</ul>
-							</div>
+							<?php echo app\widgets\SiteServicesWidget::widget(); ?>
 						</div>
 					</div>
 				</div>

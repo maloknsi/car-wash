@@ -403,7 +403,7 @@ h2 {
 .guitar {
   position: absolute;
   right:0;
-  top: 0
+  bottom: 0;
 }
 
 
@@ -474,7 +474,7 @@ h2 {
 }
 
 .guitar2 img {
-  padding-top: 3%;
+  padding-top: 20%;
 }
 
 .about-content {
@@ -607,7 +607,7 @@ h2 {
 }
 
 #sponsor .item ul {
-  font-size: 0;
+  font-size: 18px;
   padding: 0;
 }
 
@@ -615,8 +615,24 @@ h2 {
 #sponsor .item ul li {
   display: inline-block;
   list-style: none;
-  width: 33.33%;
-  margin-bottom: 75px;
+  width: 45.33%;
+  margin-bottom: 10px;
+  height: 155px;
+	vertical-align: top;
+}
+
+#sponsor .item ul li i{
+	font-size: 15px;
+	color: #faffb1;
+}
+
+#sponsor .item ul li b{
+	font-size: 18px;
+}
+
+#sponsor .item ul li span{
+	font-size: 13px;
+	color: #a0ffb5;
 }
 
 #sponsor .item ul li:last-child {
