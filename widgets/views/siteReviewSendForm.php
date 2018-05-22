@@ -24,5 +24,11 @@ use yii\widgets\ActiveForm;
 	<?= $form->field($model, 'user_email')->textInput(['maxlength' => true]) ?>
 	<?= $form->field($model, 'user_phone')->textInput(['maxlength' => true]) ?>
 	<?= $form->field($model, 'message')->textarea(['rows' => 6]) ?>
+	<?= $form->field($model, 'required_one_of_many_fields', [
+		'options'=>['tag'=>false],
+		'errorOptions' => [],
+	])->hiddenInput()->label(''); ?>
+
+	<?= $form->errorSummary($model); ?>
 	<?= Html::submitButton('Отправить', ['value' => Url::to(['site/send-review']), 'title' => 'Отправить', 'class' => 'showModalButton btn btn-primary pull-right']); ?>
 <?php ActiveForm::end(); ?>

@@ -4,8 +4,8 @@ namespace app\models;
 
 use Yii;
 use yii\base\NotSupportedException;
-use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\validators\RequiredValidator;
 use yii\web\IdentityInterface;
 
 /**
@@ -41,6 +41,7 @@ class User extends ActiveRecord implements IdentityInterface
 	const ROLE_OPERATOR = 2;
 	const ROLE_ADMIN = 4;
 
+	public $required_one_of_many_fields = 1;
 	/**
 	 * {@inheritdoc}
 	 */
@@ -57,20 +58,36 @@ class User extends ActiveRecord implements IdentityInterface
 		return [
 			['status', 'default', 'value' => self::STATUS_ACTIVE],
 			['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
-			[['created_at', 'updated_at'], 'safe'],
 			[['phone', 'role'], 'integer'],
 			[['username', 'last_name', 'first_name', 'car_model'], 'string', 'max' => 50],
 			[['car_number'], 'string', 'max' => 10],
 			[['auth_key'], 'string', 'max' => 32],
 			[['email_confirm_token', 'password_hash', 'password_reset_token', 'email'], 'string', 'max' => 255],
-			[['last_name', 'first_name', 'email', 'phone'], 'requiredOneMoreFields'],
+
+			[['phone'], 'unique'],
+
+			[['required_one_of_many_fields'], 'requiredOneOfManyFields'],
+
+			[['created_at', 'updated_at'], 'safe'],
 		];
 	}
 
-	public function requiredOneMoreFields($attribute_name, $params)
+	public function requiredOneOfManyFields($attribute_name, $params)
 	{
 		if (empty($this->phone) && empty($this->last_name) && empty($this->first_name) && empty($this->car_model) && empty($this->car_number)) {
-			$this->addError($attribute_name, 'Не все данные даполнены');
+			$errorMessage = 'Необходимо заполнить хотя бы одно поле ("'
+				.$this->attributeLabels()['phone'].'", "'
+				.$this->attributeLabels()['last_name'].'", "'
+				.$this->attributeLabels()['first_name'].'", "'
+				.$this->attributeLabels()['car_model'].'", "'
+				.$this->attributeLabels()['car_number'].'"'
+				.')';
+			$this->addError($attribute_name, $errorMessage);
+			(new RequiredValidator())->validateAttribute($this,'phone');
+			(new RequiredValidator())->validateAttribute($this,'last_name');
+			(new RequiredValidator())->validateAttribute($this,'first_name');
+			(new RequiredValidator())->validateAttribute($this,'car_model');
+			(new RequiredValidator())->validateAttribute($this,'car_number');
 			return false;
 		}
 		return true;
@@ -281,8 +298,14 @@ class User extends ActiveRecord implements IdentityInterface
 
 	public function save($runValidation = true, $attributeNames = null)
 	{
-		$this->username = trim(($this->first_name ? $this->first_name : '') .
-			($this->last_name ? " {$this->last_name}" : '') . ($this->phone ? " [{$this->phone}]" : ''));
+		if (!$this->username){
+			if ($this->first_name) $this->username = $this->first_name;
+			if ($this->last_name) $this->username .= " {$this->last_name}";
+			if ($this->phone) $this->username .= " [{$this->phone}]";
+			if ($this->car_model) $this->username .= " /{$this->car_model}";
+			if ($this->car_number) $this->username .= " /{$this->car_number}";
+			$this->username = trim($this->username);
+		}
 		return parent::save($runValidation, $attributeNames);
 	}
 }

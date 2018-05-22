@@ -67,7 +67,14 @@ use yii\widgets\ActiveForm;
 	</div>
 	<div class="modal-footer">
 		<div class="form-group">
-			<?= $form->field($model, 'id')->hiddenInput()->label(''); ?>
+			<?= $form->field($model, 'id', [
+				'options'=>['tag'=>false],
+				'errorOptions' => [],
+			])->hiddenInput()->label(''); ?>
+			<?= $form->field($model, 'required_one_of_many_fields', [
+				'options'=>['tag'=>false],
+				'errorOptions' => [],
+			])->hiddenInput()->label(''); ?>
 			<?= Html::submitButton($model->isNewRecord ? 'Создать' : 'Обновить', ['value' => Url::to(['create']), 'title' => 'Подтвердить действие', 'class' => 'showModalButton btn btn-success']); ?>
 			<?= Html::button('Закрыть', ['class' => 'btn grey-mint', 'data-dismiss' => "modal"]); ?>
 		</div>

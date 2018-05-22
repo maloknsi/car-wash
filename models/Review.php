@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\validators\RequiredValidator;
 
 /**
  * This is the model class for table "review".
@@ -25,6 +26,7 @@ class Review extends \yii\db\ActiveRecord
 	const STATUS_CONFIRMED = "confirmed";
 	const STATUS_CANCELED = "canceled";
 
+	public $required_one_of_many_fields = 1;
 	/**
 	 * {@inheritdoc}
 	 */
@@ -41,11 +43,17 @@ class Review extends \yii\db\ActiveRecord
 		return [
 			[['user_id', 'user_phone'], 'integer'],
 			[['message', 'status'], 'string'],
-			[['message'], 'required'],
-			[['created_at'], 'safe'],
 			[['user_name', 'user_email'], 'string', 'max' => 50],
-			[['user_name', 'user_email', 'user_phone'], 'requiredOneMoreFields'],
+			[['user_email'], 'email'],
+
+			[['message', 'required_one_of_many_fields'], 'required'],
+
+			[['required_one_of_many_fields'], 'requiredOneOfManyFields'],
+
 			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Review::className(), 'targetAttribute' => ['user_id' => 'id']],
+
+			[['created_at', 'user_email'], 'safe'],
+
 		];
 	}
 
@@ -65,11 +73,18 @@ class Review extends \yii\db\ActiveRecord
 			'status' => 'Статус',
 		];
 	}
-
-	public function requiredOneMoreFields($attribute_name, $params)
+	public function requiredOneOfManyFields($attribute_name, $params)
 	{
 		if (empty($this->user_name) && empty($this->user_email) && empty($this->user_phone)) {
-			$this->addError($attribute_name, 'Не все данные заполнены');
+			$errorMessage = 'Необходимо заполнить хотя бы одно поле ("'
+				.$this->attributeLabels()['user_name'].'", "'
+				.$this->attributeLabels()['user_phone'].'", "'
+				.$this->attributeLabels()['user_email'].'"'
+				.')';
+			(new RequiredValidator())->validateAttribute($this,'user_name');
+			(new RequiredValidator())->validateAttribute($this,'user_phone');
+			(new RequiredValidator())->validateAttribute($this,'user_email');
+			$this->addError($attribute_name, $errorMessage);
 			return false;
 		}
 		return true;
