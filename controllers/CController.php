@@ -110,7 +110,7 @@ abstract class CController extends Controller
 		if (!count($this->menuItems)){
 			// init menu items
 			$menuItems =[
-				'api-push'=> ['label' => 'Статистика Api Push', 'url' => ['api-push/index']],
+				//'api-push'=> ['label' => 'Статистика Api Push', 'url' => ['api-push/index']],
 
 				'control'=> [
 					'label' => 'Управление', 'url' => 'javascript:;',
@@ -135,7 +135,7 @@ abstract class CController extends Controller
 			// set menu items for users
 			if (!Yii::$app->user->isGuest) {
 				if (User::checkAccess([User::ROLE_ADMIN, User::ROLE_USER, User::ROLE_OPERATOR])) {
-					$this->menuItems['api-push'] = $menuItems['api-push'];
+					//$this->menuItems['api-push'] = $menuItems['api-push'];
 				}
 				if (User::checkAccess([User::ROLE_ADMIN])) {
 					$this->menuItems['control'] = $menuItems['control'];

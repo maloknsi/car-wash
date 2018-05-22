@@ -3,16 +3,14 @@
 namespace app\controllers;
 
 use app\models\Review;
+use app\models\User;
 use Yii;
 use yii\bootstrap\ActiveForm;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
-use yii\web\Controller;
 use yii\web\Response;
-use yii\filters\VerbFilter;
 use app\models\LoginForm;
-use app\models\ContactForm;
 
 class SiteController extends CController
 {
@@ -107,6 +105,9 @@ class SiteController extends CController
 				if ($model->smsCode){
 					if ($model->login()) {
 						$this->ajaxResult->data = Yii::$app->user->identity->username;
+						if (User::checkAccess([User::ROLE_ADMIN, User::ROLE_OPERATOR])){
+							$this->ajaxResult->data = 'admin';
+						}
 					}
 				} else {
 					$this->ajaxResult->notify =  'Пароль подтверждения отправлен на телефон ' . $model->smsPhone;
@@ -133,33 +134,5 @@ class SiteController extends CController
 		Yii::$app->user->logout();
 
 		return $this->goHome();
-	}
-
-	/**
-	 * Displays contact page.
-	 *
-	 * @return Response|string
-	 */
-	public function actionContact()
-	{
-		$model = new ContactForm();
-		if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-			Yii::$app->session->setFlash('contactFormSubmitted');
-
-			return $this->refresh();
-		}
-		return $this->render('contact', [
-			'model' => $model,
-		]);
-	}
-
-	/**
-	 * Displays about page.
-	 *
-	 * @return string
-	 */
-	public function actionAbout()
-	{
-		return $this->render('about');
 	}
 }

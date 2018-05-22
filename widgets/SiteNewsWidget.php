@@ -9,7 +9,7 @@ class SiteNewsWidget extends Widget
 {
 	public function run()
 	{
-		/** @var News $items */
+		/** @var News[] $items */
 		$items = News::find()->limit(5)->orderBy(['id'=>SORT_DESC])->all();
 		return $this->render('siteNews', ['items'=>$items]);
 	}

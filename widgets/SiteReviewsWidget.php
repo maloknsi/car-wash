@@ -11,6 +11,6 @@ class SiteReviewsWidget extends Widget
 	{
 		/** @var Review $items */
 		$items = Review::find()->where(['status'=>Review::STATUS_CONFIRMED])->limit(5)->orderBy(['id'=>SORT_DESC])->all();
-		return $this->render('SiteReviews', ['items'=>$items]);
+		return $this->render('siteReviews', ['items'=>$items]);
 	}
 }
