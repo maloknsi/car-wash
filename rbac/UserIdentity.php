@@ -4,6 +4,7 @@ namespace app\rbac;
 use app\models\User;
 use app\models\UserSmsQuery;
 use yii\base\Object;
+use yii\db\Expression;
 use yii\helpers\Html;
 use yii\web\IdentityInterface;
 
@@ -102,7 +103,9 @@ class UserIdentity extends Object implements IdentityInterface
 				'code' => $this->smsCode,
 				'phone' => $this->smsPhone,
 				'status' => UserSmsQuery::STATUS_ACTIVE,
-			])->limit(1)->orderBy(['id' => SORT_DESC])->one();
+			])
+				->andWhere(['>', 'end_time',new Expression('NOW()')])
+				->limit(1)->orderBy(['id' => SORT_DESC])->one();
 
 			if (!$userSmsQuery) {
 				$this->errorCode = self::ERROR_PASSWORD_INVALID;
