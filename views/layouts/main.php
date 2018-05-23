@@ -118,18 +118,23 @@ $this->title = $this->context->title;
 				<div class="watch">
 					<img class="img-responsive" src="/images/watch.png" alt="">
 				</div>
-				<div class="col-md-4 col-md-offset-2 col-sm-5">
-					<?= kartik\date\DatePicker::widget([
-						'removeButton' => false,
-						'name' => 'site_boxes_timetable_date',
-						'type' => kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
-						'pluginOptions' => [
-							'autoclose' => true,
-							'format' => 'yyyy-mm-dd'
-						]
-					]) ?>
+				<div class="col-sm-12 col-md-9">
+					<div class="col-sm-3 col-md-3">
+						<?= kartik\date\DatePicker::widget([
+							'removeButton' => false,
+							'name' => 'site_boxes_timetable_date',
+							'value' => date('Y-m-d'),
+							'type' => kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
+							'pluginOptions' => [
+								'autoclose' => true,
+								'format' => 'yyyy-mm-dd'
+							]
+						]) ?>
+					</div>
 <!--					<h2>our next event in</h2>-->
+					<div class="col-sm-9 col-md-9">
 					<?php echo app\widgets\SiteBoxesTimetableWidget::widget(); ?>
+					</div>
 				</div>
 			</div>
 		</div>
