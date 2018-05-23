@@ -92,4 +92,43 @@ class Order extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+
+	/**
+	 * @param null $date
+	 * @return array
+	 */
+	public static function getBoxTimetableArray($date = null)
+	{
+		if (!$date) $date = date('Y-m-d');
+		$boxesArray = [];
+		/** @var Box[] $boxes */
+		$boxes = Box::find()->all();
+		foreach ($boxes as $box){
+			$boxesArray[$box->id]['title'] = $box->title;
+			$boxOrdersArray = [];
+//			/** @var Order[] $boxOrders */
+//			$boxOrders = Order::find()->where(['box_id'=>$box->id, 'date_start'=>$date])->orderBy(['time_start'=>SORT_ASC])->all();
+//			foreach ($boxOrders as $boxOrder){
+//				$boxOrdersArray[] = [
+//					'order_id' => $boxOrder->id,
+//					'date_start' => $boxOrder->date_start,
+//					'time_start' => $boxOrder->time_start,
+//					'time_end' => $boxOrder->time_end,
+//					'money_cost' => $boxOrder->money_cost,
+//					'user_id' => $boxOrder->user_id,
+//					'service_id' => $boxOrder->service_id,
+//					'status' => $boxOrder->status,
+//				];
+//			}
+//			if (count($boxOrdersArray)){
+//			}
+			$boxOrdersArray[] = ['order_id' => 1,'time_start' => '08:00:00','time_end' => '10:00:00',];
+			$boxOrdersArray[] = ['order_id' => 1,'time_start' => '10:00:00','time_end' => '12:00:00',];
+			$boxOrdersArray[] = ['time_start' => '12:00:00','time_end' => '16:00:00',];
+			$boxOrdersArray[] = ['order_id' => 1,'time_start' => '16:00:00','time_end' => '20:00:00',];
+			$boxesArray[$box->id]['timetable'] = $boxOrdersArray;
+		}
+		return $boxesArray;
+
+	}
 }

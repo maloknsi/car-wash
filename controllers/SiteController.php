@@ -46,6 +46,7 @@ class SiteController extends CController
 	 */
 	public function actionIndex()
 	{
+		#var_dump(Order::getBoxTimetableArray());die();
 		return $this->render('index');
 	}
 
@@ -122,6 +123,14 @@ class SiteController extends CController
 				'model' => $model,
 			]);
 		}
+	}
+
+	/**
+	 * @param null $date
+	 * @return array
+	 */
+	public function actionGetBoxTimetable($date = null)
+	{
 	}
 
 	/**
