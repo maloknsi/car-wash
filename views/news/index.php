@@ -10,9 +10,9 @@ use yii\widgets\Pjax;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 ?>
-<div class="box-index">
+<div class="news-index">
 
-	<?php Pjax::begin(['id' => 'box-grid', 'timeout' => 240000, 'enablePushState' => false]); ?>
+	<?php Pjax::begin(['id' => 'news-grid', 'timeout' => 240000, 'enablePushState' => false]); ?>
 	<?= Html::button('Добавить', [
 		'class' => 'btn btn-success btn-show-modal-form',
 		'title' => 'Добавить',
@@ -39,8 +39,8 @@ use yii\widgets\Pjax;
 				'contentOptions'=>['style'=> 'text-align: center'],
 				'buttons' => [
 					'update' => function ($url, $model, $key) {
+						/* @var $model News */
 						return Html::a('<span class="glyphicon glyphicon-pencil"></span>', '#', [
-							/* @var $model News */
 							'title' => 'Редактировать',
 							'class' => 'btn-show-modal-form',
 							'data-action-url' => Url::to(['edit', 'id' => $model->id]),

@@ -75,7 +75,7 @@ use yii\widgets\ActiveForm;
 				'options'=>['tag'=>false],
 				'errorOptions' => [],
 			])->hiddenInput()->label(''); ?>
-			<?= Html::submitButton($model->isNewRecord ? 'Создать' : 'Обновить', ['value' => Url::to(['create']), 'title' => 'Подтвердить действие', 'class' => 'showModalButton btn btn-success']); ?>
+			<?= Html::submitButton($model->isNewRecord ? 'Создать' : 'Обновить', ['value' => Url::to(['edit']), 'title' => 'Подтвердить действие', 'class' => 'showModalButton btn btn-success']); ?>
 			<?= Html::button('Закрыть', ['class' => 'btn grey-mint', 'data-dismiss' => "modal"]); ?>
 		</div>
 	</div>

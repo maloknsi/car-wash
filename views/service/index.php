@@ -42,7 +42,7 @@ use yii\widgets\Pjax;
 				        return Html::a('<span class="glyphicon glyphicon-pencil"></span>', '#', [
 					        'title' => 'Редактировать',
 					        'class' => 'btn-show-modal-form',
-					        'data-action-url' => Url::to(['/service/edit', 'id' => $model->id]),
+					        'data-action-url' => Url::to(['edit', 'id' => $model->id]),
 				        ]);
 			        },
 		        ],

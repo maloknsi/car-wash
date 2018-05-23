@@ -67,6 +67,8 @@ class User extends ActiveRecord implements IdentityInterface
 			[['phone'], 'unique'],
 
 			[['required_one_of_many_fields'], 'requiredOneOfManyFields'],
+			//[['id'], AtLeastValidator::className(), 'in' => ['phone', 'last_name', 'first_name'], 'min' => 1],
+
 
 			[['created_at', 'updated_at'], 'safe'],
 		];

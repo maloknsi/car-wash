@@ -10,9 +10,9 @@ use yii\widgets\Pjax;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 ?>
-<div class="box-index">
+<div class="page-index">
 
-	<?php Pjax::begin(['id' => 'box-grid', 'timeout' => 240000, 'enablePushState' => false]); ?>
+	<?php Pjax::begin(['id' => 'page-grid', 'timeout' => 240000, 'enablePushState' => false]); ?>
 	<?= Html::button('Добавить', [
 		'class' => 'btn btn-success btn-show-modal-form',
 		'title' => 'Добавить',
@@ -41,7 +41,7 @@ use yii\widgets\Pjax;
 						return Html::a('<span class="glyphicon glyphicon-pencil"></span>', '#', [
 							'title' => 'Редактировать',
 							'class' => 'btn-show-modal-form',
-							'data-action-url' => Url::to(['/page/edit', 'id' => $model->id]),
+							'data-action-url' => Url::to(['edit', 'id' => $model->id]),
 						]);
 					},
 				],

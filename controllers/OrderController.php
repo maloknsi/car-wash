@@ -7,7 +7,7 @@ use app\models\OrderSearch;
 use yii\web\NotFoundHttpException;
 
 /**
- * UserServiceController implements the CRUD actions for UserService model.
+ * OrderController implements the CRUD actions for Order model.
  */
 class OrderController extends CAdminController
 {
@@ -17,7 +17,7 @@ class OrderController extends CAdminController
 	}
 
 	/**
-	 * Finds the UserService model based on its primary key value.
+	 * Finds the Order model based on its primary key value.
 	 * If the model is not found, a 404 HTTP exception will be thrown.
 	 * @param integer $id
 	 * @return Order the loaded model

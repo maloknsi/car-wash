@@ -1,5 +1,7 @@
 <?php
 
+use kartik\date\DatePicker;
+use kartik\datetime\DateTimePicker;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
@@ -10,7 +12,7 @@ use yii\widgets\ActiveForm;
 ?>
 
 <?php $form = ActiveForm::begin([
-	'id' => 'user-service-box-form',
+	'id' => 'order-form',
 	'enableAjaxValidation' => true,
 	'enableClientValidation' => false,
 	'action' => ['save', 'id' => $model->id],
@@ -20,24 +22,68 @@ use yii\widgets\ActiveForm;
 <div class="portlet-body">
 	<div class="panel">
 		<div class="panel panel-info">
-			<div class="panel-heading">Описание бокса мойки</div>
+			<div class="panel-heading"></div>
 			<div class="panel-body">
-				<div class="col-xs-12">
-					<?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
+				<div class="col-xs-4">
+					<?= $form->field($model, 'status')->textInput() ?>
 				</div>
-				<div class="col-xs-12">
-					<?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
+				<div class="col-xs-4">
+					<?= $form->field($model, 'user_id')->textInput() ?>
 				</div>
 			</div>
 		</div>
 		<div class="panel  panel-default">
-			<div class="panel-heading">Время работы бокса мойки</div>
+			<div class="panel-heading">Время заказа</div>
 			<div class="panel-body">
-				<div class="col-xs-6">
-					<?= $form->field($model, 'time_start')->textInput() ?>
+				<div class="col-xs-4">
+					<?= $form->field($model, 'date_start')->widget(DatePicker::classname(), [
+						'removeButton' => false,
+						'type' => kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
+						'pluginOptions' => [
+							'autoclose' => true,
+							'format' => 'yyyy-mm-dd'
+						]
+					]) ?>
 				</div>
-				<div class="col-xs-6">
-					<?= $form->field($model, 'time_end')->textInput(['maxlength' => true]) ?>
+				<div class="col-xs-4">
+					<?= $form->field($model, 'time_start')->widget(DateTimePicker::classname(), [
+						'removeButton' => false,
+						'type' => kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
+						'pickerButton' => ['icon' => 'time'],
+						'pluginOptions' => [
+							'showMeridian'=>false,
+							'template' => false,
+							'autoclose'=>true,
+							'format' => 'hh:ii',
+						]
+					]) ?>
+				</div>
+				<div class="col-xs-4">
+					<?= $form->field($model, 'time_end')->widget(DateTimePicker::classname(), [
+						'removeButton' => false,
+						'type' => kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
+						'pickerButton' => ['icon' => 'time'],
+						'pluginOptions' => [
+							'showMeridian'=>false,
+							'template' => false,
+							'autoclose'=>true,
+							'format' => 'hh:ii',
+						]
+					]) ?>
+				</div>
+			</div>
+		</div>
+		<div class="panel panel-info">
+			<div class="panel-heading">Данные заказа</div>
+			<div class="panel-body">
+				<div class="col-xs-4">
+					<?= $form->field($model, 'service_id')->textInput() ?>
+				</div>
+				<div class="col-xs-4">
+					<?= $form->field($model, 'money_cost')->textInput() ?>
+				</div>
+				<div class="col-xs-4">
+					<?= $form->field($model, 'box_id')->textInput() ?>
 				</div>
 			</div>
 		</div>
@@ -50,7 +96,7 @@ use yii\widgets\ActiveForm;
 	<div class="modal-footer">
 		<div class="form-group">
 			<?= $form->field($model, 'id')->hiddenInput()->label(''); ?>
-			<?= Html::submitButton($model->isNewRecord ? 'Создать' : 'Обновить', ['value' => Url::to(['create']), 'title' => 'Подтвердить действие', 'class' => 'showModalButton btn btn-success']); ?>
+			<?= Html::submitButton($model->isNewRecord ? 'Создать' : 'Обновить', ['value' => Url::to(['edit']), 'title' => 'Подтвердить действие', 'class' => 'showModalButton btn btn-success']); ?>
 			<?= Html::button('Закрыть', ['class' => 'btn grey-mint', 'data-dismiss' => "modal"]); ?>
 		</div>
 	</div>

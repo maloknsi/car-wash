@@ -1,7 +1,6 @@
 <?php
 
 use app\models\Order;
-use kartik\time\TimePicker;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
@@ -12,13 +11,13 @@ use yii\widgets\Pjax;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 ?>
-<div class="user_service-index">
+<div class="order-index">
 
-	<?php Pjax::begin(['id' => 'box-grid', 'timeout' => 240000, 'enablePushState' => false]); ?>
+	<?php Pjax::begin(['id' => 'order-grid', 'timeout' => 240000, 'enablePushState' => false]); ?>
 	<?= Html::button('Добавить', [
 		'class' => 'btn btn-success btn-show-modal-form',
 		'title' => 'Добавить',
-		'data-action-url' => Url::to('/user-service/edit'),
+		'data-action-url' => Url::to('/order/edit'),
 	]); ?>
 
 	<?= GridView::widget([
@@ -52,50 +51,72 @@ use yii\widgets\Pjax;
 			],
 			[
 				'attribute' => 'created_at',
-				'filter' => \yii\jui\DatePicker::widget([
-					'language' => 'ru',
-					'dateFormat' => 'yyyy-MM-dd',
+				'filter' => kartik\date\DatePicker::widget([
+					//http://demos.krajee.com/widget-details/datepicker
 					'model' => $searchModel,
 					'attribute' => 'created_at',
-					'options' => ['class' => 'form-control', 'style' => 'width: 100px;'],
-				]),
-				'format' => 'html',
-			],
-			[
-				'attribute' => 'date_start',
-				'filter' => \yii\jui\DatePicker::widget([
-					'language' => 'ru',
-					'dateFormat' => 'yyyy-MM-dd',
-					'model' => $searchModel,
-					'attribute' => 'date_start',
-					'options' => ['class' => 'form-control', 'style' => 'width: 100px;'],
-				]),
-				'format' => 'html',
-			],
-			[
-				'attribute' => 'time_start',
-				'filter' => TimePicker::widget([
-					'model' => $searchModel,
-					'attribute' => 'time_start',
+					'removeButton' => false,
+					'type' => kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
 					'pluginOptions' => [
-						'showSeconds' => false,
-						'template' => false
-					],
-					'options' => [
-						'readonly' => false,
-					],
-					'addonOptions' => [
-						'asButton' => false,
-						'buttonOptions' => ['class' => 'btn btn-info']
+						'autoclose'=>true,
+						'format' => 'yyyy-mm-dd'
 					]
 				]),
 				'headerOptions' => ['style' => 'min-width: 155px;'],
 			],
-			'time_start',
-			'time_end',
+			[
+				'attribute' => 'date_start',
+				'filter' => kartik\date\DatePicker::widget([
+					//http://demos.krajee.com/widget-details/datepicker
+					'model' => $searchModel,
+					'attribute' => 'date_start',
+					'removeButton' => false,
+					'type' => kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
+					'pluginOptions' => [
+						'autoclose'=>true,
+						'format' => 'yyyy-mm-dd'
+					]
+				]),
+				'headerOptions' => ['style' => 'min-width: 155px;'],
+			],
+			[
+				'attribute' => 'time_start',
+				'filter' => \kartik\datetime\DateTimePicker::widget([
+					//http://demos.krajee.com/widget-details/datetimepicker
+					'model' => $searchModel,
+					'attribute' => 'time_start',
+					'removeButton' => false,
+					'pickerButton' => ['icon' => 'time'],
+					'type' => kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
+					'pluginOptions' => [
+						'showMeridian'=>false,
+						'template' => false,
+						'autoclose'=>true,
+						'format' => 'hh:ii',
+					],
+				]),
+				'headerOptions' => ['style' => 'min-width: 155px;'],
+			],
+			[
+				'attribute' => 'time_end',
+				'filter' => \kartik\datetime\DateTimePicker::widget([
+					//http://demos.krajee.com/widget-details/datetimepicker
+					'model' => $searchModel,
+					'attribute' => 'time_end',
+					'removeButton' => false,
+					'pickerButton' => ['icon' => 'time'],
+					'type' => kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
+					'pluginOptions' => [
+						'showMeridian'=>false,
+						'template' => false,
+						'autoclose'=>true,
+						'format' => 'hh:ii',
+					],
+				]),
+				'headerOptions' => ['style' => 'min-width: 155px;'],
+			],
 			'money_cost',
 			'status',
-
 			[
 				'class' => 'yii\grid\ActionColumn',
 				'template' => '{update}',
@@ -106,7 +127,7 @@ use yii\widgets\Pjax;
 						return Html::a('<span class="glyphicon glyphicon-pencil"></span>', '#', [
 							'title' => 'Редактировать',
 							'class' => 'btn-show-modal-form',
-							'data-action-url' => Url::to(['/user-service/edit', 'id' => $model->id]),
+							'data-action-url' => Url::to(['edit', 'id' => $model->id]),
 						]);
 					},
 				],

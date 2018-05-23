@@ -21,9 +21,10 @@
         "bower-asset/bootbox": "*",
         "skinka/yii2-alert-gritter": "*",
         "mihaildev/yii2-ckeditor": "*",
-        "yiisoft/yii2-jui": "^2.0",
-        "kartik-v/yii2-widget-timepicker": "*",
-        "2amigos/yii2-date-time-picker-widget": "~1.0"
+        "codeonyii/yii2-at-least-validator": "^1.2",
+        "kartik-v/yii2-widget-datetimepicker": "*",
+        "kartik-v/yii2-widget-timepicker":"*",
+        "kartik-v/yii2-widget-datepicker": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
