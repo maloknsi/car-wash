@@ -115,11 +115,12 @@ $this->title = $this->context->title;
 	<section id="explore">
 		<div class="container">
 			<div class="row">
+                <h2 class="heading">Забронировать автомойку</h2>
 				<div class="watch">
 					<img class="img-responsive" src="/images/watch.png" alt="">
 				</div>
-				<div class="col-sm-12 col-md-9">
-					<div class="col-sm-3 col-md-3">
+				<div class="col-sm-12 col-md-12">
+					<div class="col-sm-6 col-md-3">
 						<?= kartik\date\DatePicker::widget([
 							'removeButton' => false,
 							'name' => 'site_boxes_timetable_date',
@@ -132,9 +133,10 @@ $this->title = $this->context->title;
 						]) ?>
 					</div>
 <!--					<h2>our next event in</h2>-->
-					<div class="col-sm-9 col-md-9">
+					<div class="col-sm-12 col-md-9">
 					<?php echo app\widgets\SiteBoxesTimetableWidget::widget(); ?>
 					</div>
+
 				</div>
 			</div>
 		</div>
