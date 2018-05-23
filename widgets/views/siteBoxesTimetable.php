@@ -5,6 +5,7 @@ use yii\helpers\Url;
 
 ?>
 <?php foreach ($boxesTimetable as $index => $boxTimetable): ?>
+<div class="col-xs-12 col-sm-6 col-md-4">
 	<div class="panel panel-info">
 		<div class="panel-heading"><?= $boxTimetable['title'] ?></div>
 		<div class="panel-body">
@@ -27,4 +28,5 @@ use yii\helpers\Url;
 			<?php endif; ?>
 		</div>
 	</div>
+</div>
 <?php endforeach; ?>
