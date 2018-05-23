@@ -56,10 +56,6 @@ use yii\widgets\ActiveForm;
 			</div>
 		</div>
 	</div>
-
-	<!--	--><? //= $form->field($model, 'created_at')->textInput() ?>
-	<!--	--><? //= $form->field($model, 'updated_at')->textInput() ?>
-
 	<div class="row">
 		<div class="col-xs-12 col-md-12 col-lg-12 ">
 			<?= $form->errorSummary($model); ?>

@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Order;
 use app\models\Review;
 use app\models\User;
 use Yii;
@@ -25,14 +26,14 @@ class SiteController extends CController
 					'rules' => [
 						[
 							'allow' => true,
-							'actions' => ['index'],
+							'actions' => ['index', 'get-reservation-box-form'],
 							'roles' => [],
 						],
 					],
 				],
 				[
 					'class' => 'yii\filters\AjaxFilter',
-					'only' => ['login'],
+					'only' => ['login', 'get-reservation-box-form'],
 					'errorMessage' => 'Ошибка типа запорса (AJAX ONLY!)',
 				],
 			]
@@ -88,7 +89,11 @@ class SiteController extends CController
 		$this->layout = 'admin';
 		$exception = Yii::$app->errorHandler->exception;
 		if ($exception !== null) {
-			return $this->render('error', ['exception' => $exception]);
+			if (Yii::$app->request->isAjax){
+				$this->ajaxResult->error =  $exception->getMessage();
+			} else {
+				return $this->render('error', ['exception' => $exception]);
+			}
 		}
 	}
 
@@ -131,6 +136,14 @@ class SiteController extends CController
 	 */
 	public function actionGetBoxTimetable($date = null)
 	{
+	}
+
+	/**
+	 * @return array
+	 */
+	public function actionGetReservationBoxForm()
+	{
+		return $this->renderAjax('/order/reservationBoxForm', ['order' => new Order(),]);
 	}
 
 	/**
