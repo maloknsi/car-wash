@@ -60,6 +60,9 @@ jQuery(document).ready(function () {
 
 	$(document).on("click", ".btn-show-confirm-form", function () {
 		var buttonCalled = $(this);
+		if ($(buttonCalled).hasClass('disabled')) return false;
+		$(buttonCalled).addClass('disabled');
+
 		bootbox.dialog({
 			message: buttonCalled.attr('title')+'?',
 			title: "Подтвердите",
@@ -85,6 +88,7 @@ jQuery(document).ready(function () {
 										$(".grid-view").yiiGridView("applyFilter");
 									}
 								}
+								$(buttonCalled).removeClass('disabled');
 							}
 						});
 					}
@@ -93,6 +97,7 @@ jQuery(document).ready(function () {
 					label: "Нет",
 					className: "btn-success",
 					callback: function() {
+						$(buttonCalled).removeClass('disabled');
 					}
 				}
 			}

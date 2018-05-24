@@ -93,8 +93,12 @@ use yii\widgets\Pjax;
 										return date('H:i', strtotime($data->time_processing));
 									},
 									'headerOptions' => ['style' => 'min-width: 120px;'],
+									'contentOptions' => ['style' => 'text-align: center'],
 								],
-								'money_cost',
+								[
+									'attribute' => 'money_cost',
+									'contentOptions' => ['style' => 'text-align: center'],
+								],
 								[
 									'class' => 'yii\grid\ActionColumn',
 									'template' => '{reservation}',

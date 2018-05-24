@@ -782,6 +782,6 @@ h2 {
 	font-weight: 500;
 }
 
-.datepicker, .datetimepicker{
+.datepicker, .datetimepicker, .modal-content{
 	color : #333;
 }

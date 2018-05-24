@@ -7,6 +7,7 @@ use app\models\Review;
 use app\models\User;
 use Yii;
 use yii\bootstrap\ActiveForm;
+use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
@@ -22,18 +23,23 @@ class SiteController extends CController
 			[
 				'access' => [
 					'class' => AccessControl::class,
-					'only' => ['index'],
+					'only' => ['index', 'get-reservation-box-form', 'set-reservation-box', 'get-my-reservation-form'],
 					'rules' => [
 						[
 							'allow' => true,
-							'actions' => ['index', 'get-reservation-box-form', 'set-reservation-box'],
+							'actions' => ['index', 'get-reservation-box-form'],
 							'roles' => [],
+						],
+						[
+							'allow' => true,
+							'actions' => ['set-reservation-box','get-my-reservation-form'],
+							'roles' => ['@'],
 						],
 					],
 				],
 				[
 					'class' => 'yii\filters\AjaxFilter',
-					'only' => ['login', 'get-reservation-box-form', 'get-box-timetable'],
+					'only' => ['login', 'get-reservation-box-form', 'get-box-timetable', 'get-my-reservation-form'],
 					'errorMessage' => 'Ошибка типа запорса (AJAX ONLY!)',
 				],
 			]
@@ -131,11 +137,19 @@ class SiteController extends CController
 	}
 
 	/**
-	 * @param null $date
 	 * @return array
+	 * @internal param null $date
 	 */
-	public function actionGetBoxTimetable($date = null)
+	public function actionGetMyReservationForm()
 	{
+		$dataProvider = new ActiveDataProvider([
+			'query' => Order::find()->where(['user_id'=>\Yii::$app->user->id])->orderBy(['date_start'=>SORT_DESC,'time_start'=>SORT_DESC]),
+			'pagination' => [
+				'pageSize' => 100,
+			],
+			'sort' => false
+		]);
+		return $this->renderAjax('/user/reservationBoxForm', ['orders' => $dataProvider]);
 	}
 
 	/**
