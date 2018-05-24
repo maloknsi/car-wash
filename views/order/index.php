@@ -1,6 +1,7 @@
 <?php
 
 use app\models\Order;
+use faryshta\widgets\JqueryClockPicker;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
@@ -51,66 +52,46 @@ use yii\widgets\Pjax;
 			],
 			[
 				'attribute' => 'created_at',
-				'filter' => kartik\date\DatePicker::widget([
-					//http://demos.krajee.com/widget-details/datepicker
+				'filter' => \yii\jui\DatePicker::widget([
 					'model' => $searchModel,
 					'attribute' => 'created_at',
-					'removeButton' => false,
-					'type' => kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
-					'pluginOptions' => [
-						'autoclose'=>true,
-						'format' => 'yyyy-mm-dd'
+					'dateFormat' => 'yyyy-MM-dd',
+					'options' => [
+						'class' => 'form-control'
 					]
 				]),
-				'headerOptions' => ['style' => 'min-width: 155px;'],
+				'headerOptions' => ['style' => 'min-width: 195px;'],
 			],
 			[
 				'attribute' => 'date_start',
-				'filter' => kartik\date\DatePicker::widget([
-					//http://demos.krajee.com/widget-details/datepicker
+				'filter' => \yii\jui\DatePicker::widget([
 					'model' => $searchModel,
 					'attribute' => 'date_start',
-					'removeButton' => false,
-					'type' => kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
-					'pluginOptions' => [
-						'autoclose'=>true,
-						'format' => 'yyyy-mm-dd'
+					'dateFormat' => 'yyyy-MM-dd',
+					'options' => [
+						'class' => 'form-control'
 					]
 				]),
-				'headerOptions' => ['style' => 'min-width: 155px;'],
+				'headerOptions' => ['style' => 'min-width: 195px;'],
 			],
 			[
 				'attribute' => 'time_start',
-				'filter' => \kartik\datetime\DateTimePicker::widget([
-					//http://demos.krajee.com/widget-details/datetimepicker
+				'filter' => JqueryClockPicker::widget([
 					'model' => $searchModel,
 					'attribute' => 'time_start',
-					'removeButton' => false,
-					'pickerButton' => ['icon' => 'time'],
-					'type' => kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
-					'pluginOptions' => [
-						'showMeridian'=>false,
-						'template' => false,
-						'autoclose'=>true,
-						'format' => 'hh:ii',
+					'clientOptions' => [
+						'autoclose' => true,
 					],
 				]),
 				'headerOptions' => ['style' => 'min-width: 155px;'],
 			],
 			[
 				'attribute' => 'time_end',
-				'filter' => \kartik\datetime\DateTimePicker::widget([
-					//http://demos.krajee.com/widget-details/datetimepicker
+				'filter' => JqueryClockPicker::widget([
 					'model' => $searchModel,
 					'attribute' => 'time_end',
-					'removeButton' => false,
-					'pickerButton' => ['icon' => 'time'],
-					'type' => kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
-					'pluginOptions' => [
-						'showMeridian'=>false,
-						'template' => false,
-						'autoclose'=>true,
-						'format' => 'hh:ii',
+					'clientOptions' => [
+						'autoclose' => true,
 					],
 				]),
 				'headerOptions' => ['style' => 'min-width: 155px;'],
@@ -128,21 +109,6 @@ use yii\widgets\Pjax;
 							'title' => 'Редактировать',
 							'class' => 'btn-show-modal-form',
 							'data-action-url' => Url::to(['edit', 'id' => $model->id]),
-						]);
-					},
-				],
-			],
-			[
-				'class' => 'yii\grid\ActionColumn',
-				'template' => '{delete1}',
-				'contentOptions' => ['style' => 'text-align: center'],
-				'buttons' => [
-					'delete' => function ($url, $model) {
-						/** @var $model Order */
-						return Html::a('<span class="glyphicon glyphicon-trash button-action-delete"></span>', 'javascript:;', [
-							'title' => 'Удалить этот элемент',
-							'class' => 'btn-show-confirm-form',
-							'data-action-url' => Url::to(['delete', 'id' => $model->id]),
 						]);
 					},
 				],

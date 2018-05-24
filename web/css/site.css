@@ -774,7 +774,7 @@ h2 {
 }
 
 
-.portlet-body{
+.portlet-body, .panel-body{
 	color : #333;
 	font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
 	-webkit-text-size-adjust: 100%;
@@ -782,6 +782,6 @@ h2 {
 	font-weight: 500;
 }
 
-.datepicker-days{
+.datepicker, .datetimepicker{
 	color : #333;
 }

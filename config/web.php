@@ -13,6 +13,7 @@ $config = [
 	'timeZone'=>'Europe/Kiev',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
+        '@vendor/bower/clockpicker/dist' => '@vendor/bower-asset/clockpicker/dist',
         '@npm'   => '@vendor/npm-asset',
     ],
     'components' => [

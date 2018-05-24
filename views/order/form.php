@@ -1,16 +1,16 @@
 <?php
 
+use faryshta\widgets\JqueryClockPicker;
 use kartik\date\DatePicker;
-use kartik\datetime\DateTimePicker;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Order */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
 <?php $form = ActiveForm::begin([
 	'id' => 'order-form',
 	'enableAjaxValidation' => true,
@@ -36,7 +36,7 @@ use yii\widgets\ActiveForm;
 			<div class="panel-heading">Время заказа</div>
 			<div class="panel-body">
 				<div class="col-xs-4">
-					<?= $form->field($model, 'date_start')->widget(DatePicker::classname(), [
+					<?php echo $form->field($model, 'date_start')->widget(DatePicker::classname(), [
 						'removeButton' => false,
 						'type' => kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
 						'pluginOptions' => [
@@ -46,30 +46,42 @@ use yii\widgets\ActiveForm;
 					]) ?>
 				</div>
 				<div class="col-xs-4">
-					<?= $form->field($model, 'time_start')->widget(DateTimePicker::classname(), [
-						'removeButton' => false,
-						'type' => kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
-						'pickerButton' => ['icon' => 'time'],
-						'pluginOptions' => [
-							'showMeridian'=>false,
-							'template' => false,
-							'autoclose'=>true,
-							'format' => 'hh:ii',
-						]
-					]) ?>
+					<?php echo $form->field($model, 'time_start', ['template' => '
+									   <div>{label}</div>
+									   <div class="col-md-12">
+										   <div class="input-group col-md-12 ">
+										   	{input}
+											  <span class="input-group-addon danger">
+												 <span class="glyphicon glyphicon-time"></span>
+											  </span>
+											  
+										   </div>
+										   {error}{hint}
+									   </div>'])->widget(JqueryClockPicker::className(),[
+						'clientOptions' => [
+							'autoclose' => true,
+							'default' => 'now'
+						],
+					]); ?>
 				</div>
 				<div class="col-xs-4">
-					<?= $form->field($model, 'time_end')->widget(DateTimePicker::classname(), [
-						'removeButton' => false,
-						'type' => kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
-						'pickerButton' => ['icon' => 'time'],
-						'pluginOptions' => [
-							'showMeridian'=>false,
-							'template' => false,
-							'autoclose'=>true,
-							'format' => 'hh:ii',
-						]
-					]) ?>
+					<?php echo $form->field($model, 'time_end', ['template' => '
+									   <div>{label}</div>
+									   <div class="col-md-12">
+										   <div class="input-group col-md-12 ">
+										   	{input}
+											  <span class="input-group-addon danger">
+												 <span class="glyphicon glyphicon-time"></span>
+											  </span>
+											  
+										   </div>
+										   {error}{hint}
+									   </div>'])->widget(JqueryClockPicker::className(),[
+						'clientOptions' => [
+							'autoclose' => true,
+							'default' => 'now'
+						],
+					]); ?>
 				</div>
 			</div>
 		</div>
@@ -100,5 +112,5 @@ use yii\widgets\ActiveForm;
 			<?= Html::button('Закрыть', ['class' => 'btn grey-mint', 'data-dismiss' => "modal"]); ?>
 		</div>
 	</div>
-	<?php ActiveForm::end(); ?>
 </div>
+<?php ActiveForm::end(); ?>

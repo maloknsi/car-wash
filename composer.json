@@ -16,7 +16,7 @@
     "require": {
         "php": ">=5.4.0",
         "yiisoft/yii2": "~2.0.14",
-        "yiisoft/yii2-bootstrap": "~2.0.0",
+        "yiisoft/yii2-bootstrap": "*",
         "yiisoft/yii2-swiftmailer": "~2.0.0",
         "bower-asset/bootbox": "*",
         "skinka/yii2-alert-gritter": "*",
@@ -24,7 +24,9 @@
         "codeonyii/yii2-at-least-validator": "^1.2",
         "kartik-v/yii2-widget-datetimepicker": "*",
         "kartik-v/yii2-widget-timepicker":"*",
-        "kartik-v/yii2-widget-datepicker": "*"
+        "kartik-v/yii2-widget-datepicker": "*",
+        "faryshta/yii2-clockpicker": "*",
+        "yiisoft/yii2-jui": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
