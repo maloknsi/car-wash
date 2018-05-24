@@ -59,4 +59,22 @@ class Box extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Order::class, ['box_id' => 'id']);
     }
+
+	/**
+	 * @param integer $boxId
+	 * @param string $date
+	 * @return \yii\db\ActiveQuery
+	 */
+	public static function getAvailableServices($boxId,$date)
+	{
+		$searchModel = new ServiceSearch();
+		if ($boxId && $boxId) {
+			$searchModel->box_id = $boxId;
+			$searchModel->date_time_start = $date;
+		}
+		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+		return $dataProvider;
+	}
+
 }

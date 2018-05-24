@@ -9,7 +9,7 @@ class SiteBoxesTimetableWidget extends Widget
 {
 	public function run()
 	{
-		$boxesTimetable = Order::getBoxTimetableArray();
+		$boxesTimetable = Order::getBoxTimetableArray(\Yii::$app->getRequest()->get('date_start',date('Y-m-d')));
 		return $this->render('siteBoxesTimetable', ['boxesTimetable'=>$boxesTimetable]);
 	}
 }

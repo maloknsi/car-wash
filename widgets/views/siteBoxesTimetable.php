@@ -2,31 +2,44 @@
 /** @var mixed $boxesTimetable */
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\widgets\Pjax;
 
 ?>
-<?php foreach ($boxesTimetable as $index => $boxTimetable): ?>
-<div class="col-xs-12 col-sm-6 col-md-4">
-	<div class="panel panel-info">
-		<div class="panel-heading"><?= $boxTimetable['title'] ?></div>
-		<div class="panel-body">
-			<div class="col-xs-12">
-				<h2><?= $boxTimetable['title'] ?></h2>
-			</div>
-			<?php if (isset($boxTimetable['timetable'])): ?>
-				<?php foreach ($boxTimetable['timetable'] as $timetable): ?>
-					<div class="col-xs-12">
-						<div class="form-group">
-								<?= Html::label($timetable['time_start'] . ' - ' . $timetable['time_end'])?>
+<? Pjax::begin(['id' => 'site-boxes-timetable-pjax', 'timeout' => 7000, 'enablePushState' => false,'clientOptions' => ['method' => 'POST']]); ?>
+<?php foreach ($boxesTimetable as $boxId => $boxTimetable): ?>
+	<div class="col-xs-12 col-sm-6 col-md-4">
+		<div class="panel panel-info">
+			<div class="panel-heading"><?= $boxTimetable['title'] ?></div>
+			<div class="panel-body">
+				<?php if (isset($boxTimetable['timetable'])): ?>
+					<?php foreach ($boxTimetable['timetable'] as $timetable): ?>
+						<div class="col-xs-12">
+							<div class="form-group">
 								<?php if (!$timetable['order_id']): ?>
-									<?= Html::button('Записаться', ['value' => Url::to(['edit']), 'title' => 'Записаться', 'class' => 'showModalButton btn btn-success']); ?>
+									<?= Html::button(($timetable['time_start'] . ' - ' . $timetable['time_end']
+										. ' - Записаться'), [
+										'title' => 'Записаться',
+										'class' => 'btn-show-modal-form btn btn-success',
+										'data-action-url' => Url::to([
+											'site/get-reservation-box-form',
+											'Order[date_start]' => $boxTimetable['date_start'],
+											'Order[time_start]' => $timetable['time_start'],
+											'Order[box_id]' => $boxId,
+										]),
+									]); ?>
 								<?php else: ?>
-									<?= Html::button('Занято', ['class' => 'btn grey-mint', 'data-dismiss' => "modal"]); ?>
+									<?= Html::button(($timetable['time_start'] . ' - ' . $timetable['time_end']
+										. ' - Занято'), [
+										'title' => 'Занято',
+										'class' => 'btn grey-mint',
+									]); ?>
 								<?php endif; ?>
+							</div>
 						</div>
-					</div>
-				<?php endforeach; ?>
-			<?php endif; ?>
+					<?php endforeach; ?>
+				<?php endif; ?>
+			</div>
 		</div>
 	</div>
-</div>
 <?php endforeach; ?>
+<? Pjax::end(); ?>

@@ -26,14 +26,14 @@ class SiteController extends CController
 					'rules' => [
 						[
 							'allow' => true,
-							'actions' => ['index', 'get-reservation-box-form'],
+							'actions' => ['index', 'get-reservation-box-form', 'set-reservation-box'],
 							'roles' => [],
 						],
 					],
 				],
 				[
 					'class' => 'yii\filters\AjaxFilter',
-					'only' => ['login', 'get-reservation-box-form'],
+					'only' => ['login', 'get-reservation-box-form', 'get-box-timetable'],
 					'errorMessage' => 'Ошибка типа запорса (AJAX ONLY!)',
 				],
 			]
@@ -143,7 +143,32 @@ class SiteController extends CController
 	 */
 	public function actionGetReservationBoxForm()
 	{
-		return $this->renderAjax('/order/reservationBoxForm', ['order' => new Order(),]);
+		$orderData = Yii::$app->getRequest()->get();
+		$order = new Order();
+		$order->load($orderData);
+		$order->date_time_start = date('Y-m-d H:i', strtotime($order->date_start . ' ' . $order->time_start));
+		$order->user_id = \Yii::$app->user->id;
+		return $this->renderAjax('/order/reservationBoxForm', ['order' => $order,]);
+	}
+	/**
+	 * @return array
+	 */
+	public function actionSetReservationBox()
+	{
+		$model = new Order();
+		if ($model->load(Yii::$app->getRequest()->post())) {
+			$model->user_id = \Yii::$app->user->id;
+			$model->money_cost = $model->service->money_cost;
+			$model->date_start = date('Y-m-d', strtotime($model->date_time_start));
+			$model->time_start = date('H:i', strtotime($model->date_time_start));
+			$model->time_end = date('H:i', strtotime($model->time_start) + strtotime($model->service->time_processing) - strtotime("00:00:00"));
+			if (User::checkAccess([User::ROLE_USER])){
+			}
+			if ($model->validate() && $model->save()){
+				$this->ajaxResult->data = "Спасибо, запись произведена #" . $model->id;
+			}
+		}
+		$this->ajaxResult->error = $model->hasErrors() ? Html::errorSummary($model) : null;
 	}
 
 	/**

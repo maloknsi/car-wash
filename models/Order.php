@@ -18,6 +18,7 @@ use Yii;
  * @property string $time_end
  * @property string $money_cost
  * @property int $status
+ * @property \data $date_time_start
  *
  * @property Box $box
  * @property Service $service
@@ -25,6 +26,7 @@ use Yii;
  */
 class Order extends \yii\db\ActiveRecord
 {
+	public $date_time_start;
     /**
      * {@inheritdoc}
      */
@@ -39,9 +41,9 @@ class Order extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['service_id', 'box_id', 'date_start', 'time_start', 'time_end', 'money_cost'], 'required'],
+            [['service_id', 'box_id', 'date_start', 'time_start', 'time_end', 'money_cost', 'user_id'], 'required'],
             [['service_id', 'user_id', 'box_id', 'status'], 'integer'],
-            [['created_at', 'updated_at', 'date_start', 'time_start', 'time_end'], 'safe'],
+            [['created_at', 'updated_at', 'date_start', 'time_start', 'time_end', 'date_time_start'], 'safe'],
             [['money_cost'], 'number'],
             [['box_id'], 'exist', 'skipOnError' => true, 'targetClass' => Box::className(), 'targetAttribute' => ['box_id' => 'id']],
             [['service_id'], 'exist', 'skipOnError' => true, 'targetClass' => Service::className(), 'targetAttribute' => ['service_id' => 'id']],
@@ -66,6 +68,7 @@ class Order extends \yii\db\ActiveRecord
             'time_end' => 'Время окончания',
             'money_cost' => 'Стоимость',
             'status' => 'Статус',
+            'date_time_start' => 'Время записи',
         ];
     }
 
@@ -105,6 +108,7 @@ class Order extends \yii\db\ActiveRecord
 		$boxes = Box::find()->all();
 		foreach ($boxes as $box){
 			$boxesArray[$box->id]['title'] = $box->title;
+			$boxesArray[$box->id]['date_start'] = $date;
 			$boxOrdersArray = [];
 			/** @var Order[] $boxOrders */
 			$boxOrders = Order::find()->where(['box_id'=>$box->id, 'date_start'=>$date])->orderBy(['time_start'=>SORT_ASC])->all();
@@ -141,6 +145,5 @@ class Order extends \yii\db\ActiveRecord
 			$boxesArray[$box->id]['timetable'] = $boxOrdersArray;
 		}
 		return $boxesArray;
-
 	}
 }

@@ -112,5 +112,17 @@ jQuery(document).ready(function () {
 			}
 		});
 	});
+	$(document).on("beforeSubmit", "#reservation-form", function () {
+		setTimeout(function() {
+			console.log(1);
+			$.pjax.reload({container:'#site-boxes-timetable-pjax', url: "/site/index"});
+		}, 500);
+	});
+	$('#site-boxes_timetable_date').on('change', function () {
+		$.pjax.reload({container:'#site-boxes-timetable-pjax', url: "/site/index"});
+	});
+	$('#site-boxes-timetable-pjax').on('pjax:beforeSend', function (e, jqXHR, settings) {
+		settings.url = settings.url + '&date_start='+$('#site-boxes_timetable_date').val();
+	});
 
 });

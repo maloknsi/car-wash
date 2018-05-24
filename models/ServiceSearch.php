@@ -12,15 +12,20 @@ use app\models\Service;
  */
 class ServiceSearch extends Service
 {
-    /**
+	public $date_time_start;
+	public $service_time_start;
+	public $service_date;
+	public $box_id;
+	/**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id'], 'integer'],
-            [['title', 'description', 'time_processing'], 'safe'],
+            [['id', 'box_id'], 'integer'],
             [['money_cost'], 'number'],
+            [['date_time_start'], 'string'],
+	        [['title', 'description', 'time_processing', 'date_time_start'], 'safe'],
         ];
     }
 
@@ -57,7 +62,28 @@ class ServiceSearch extends Service
             // $query->where('0=1');
             return $dataProvider;
         }
+        // for select Box Available Services
+	    if ($this->date_time_start){
 
+	    	$this->service_time_start = date('H:i', strtotime($this->date_time_start));
+		    $this->service_date = date('Y-m-d', strtotime($this->date_time_start));
+
+		    $query->innerJoin('box',
+			    "box.id = {$this->box_id}"
+			    ." and box.time_start <= '{$this->service_time_start}'"
+			    ." and CONVERT(box.time_end USING utf8) >= ADDTIME('{$this->service_time_start}', service.time_processing)"
+		    );
+
+		    $query->leftJoin('`order`',
+			    "`order`.box_id = {$this->box_id} and ("
+			    ."('{$this->service_time_start}' > `order`.time_start and '{$this->service_time_start}' < `order`.time_end)"
+			    ." or "
+			    ."(ADDTIME('{$this->service_time_start}', `service`.time_processing) > CONVERT(`order`.time_start USING utf8) and ADDTIME('{$this->service_time_start}', `service`.time_processing) < CONVERT(`order`.time_end USING utf8))"
+			    .")"
+		    );
+		    $query->andWhere("order.id IS NULL");
+
+	    }
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,

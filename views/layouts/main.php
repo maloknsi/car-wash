@@ -8,6 +8,7 @@ use yii\bootstrap\Modal;
 use yii\helpers\Html;
 use app\assets\AppAsset;
 use yii\helpers\Url;
+use yii\widgets\Pjax;
 
 AppAsset::register($this);
 BootboxAsset::overrideSystemConfirm();
@@ -115,28 +116,27 @@ $this->title = $this->context->title;
 	<section id="explore">
 		<div class="container">
 			<div class="row">
-                <h2 class="heading">Забронировать автомойку</h2>
+                <h2 class="heading">
+	                <div class="col-sm-6 col-md-10" style="text-align: right">Забронировать автомойку</div>
+	                <div class="col-sm-6 col-md-2">
+		                <?= kartik\date\DatePicker::widget([
+			                'removeButton' => false,
+			                'name' => 'site_boxes_timetable_date',
+			                'id' => 'site-boxes_timetable_date',
+			                'value' => date('Y-m-d'),
+			                'type' => kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
+			                'pluginOptions' => [
+				                'autoclose' => true,
+				                'format' => 'yyyy-mm-dd'
+			                ]
+		                ]) ?>
+	                </div>
+                </h2>
 				<div class="watch">
 					<img class="img-responsive" src="/images/watch.png" alt="">
 				</div>
-				<div class="col-sm-12 col-md-12">
-					<div class="col-sm-6 col-md-3">
-						<?= kartik\date\DatePicker::widget([
-							'removeButton' => false,
-							'name' => 'site_boxes_timetable_date',
-							'value' => date('Y-m-d'),
-							'type' => kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
-							'pluginOptions' => [
-								'autoclose' => true,
-								'format' => 'yyyy-mm-dd'
-							]
-						]) ?>
-					</div>
-<!--					<h2>our next event in</h2>-->
-					<div class="col-sm-12 col-md-9">
+				<div class="col-sm-12 col-md-12" style="padding-top: 17px" id="">
 					<?php echo app\widgets\SiteBoxesTimetableWidget::widget(); ?>
-					</div>
-
 				</div>
 			</div>
 		</div>

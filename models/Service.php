@@ -1,6 +1,7 @@
 <?php
 
 namespace app\models;
+use UserService;
 
 /**
  * This is the model class for table "service".
@@ -15,6 +16,9 @@ namespace app\models;
  */
 class Service extends \yii\db\ActiveRecord
 {
+	public function formName(){
+		return 's';
+	}
     /**
      * {@inheritdoc}
      */
