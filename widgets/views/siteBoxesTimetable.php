@@ -15,7 +15,21 @@ use yii\widgets\Pjax;
 					<?php foreach ($boxTimetable['timetable'] as $timetable): ?>
 						<div class="col-xs-12">
 							<div class="form-group">
-								<?php if (!$timetable['order_id']): ?>
+								<?php if (
+									(date('Y-m-d') > $boxTimetable['date_start']) ||
+									(date('Y-m-d') == $boxTimetable['date_start'] && date('H:i') > $timetable['time_start'])
+								): ?>
+									<?= Html::button(($timetable['time_start'] . ' - ' . $timetable['time_end']), [
+										'title' => '-'.date('Y-m-d').'-'.$timetable['date_start'],
+										'class' => 'btn grey-mint',
+									]); ?>
+								<?php elseif($timetable['order_id']): ?>
+									<?= Html::button(($timetable['time_start'] . ' - ' . $timetable['time_end']
+										. ' - Занято'), [
+										'title' => 'Занято',
+										'class' => 'btn grey-mint',
+									]); ?>
+								<?php else:?>
 									<?= Html::button(($timetable['time_start'] . ' - ' . $timetable['time_end']
 										. ' - Записаться'), [
 										'title' => 'Записаться',
@@ -26,12 +40,6 @@ use yii\widgets\Pjax;
 											'Order[time_start]' => $timetable['time_start'],
 											'Order[box_id]' => $boxId,
 										]),
-									]); ?>
-								<?php else: ?>
-									<?= Html::button(($timetable['time_start'] . ' - ' . $timetable['time_end']
-										. ' - Занято'), [
-										'title' => 'Занято',
-										'class' => 'btn grey-mint',
 									]); ?>
 								<?php endif; ?>
 							</div>

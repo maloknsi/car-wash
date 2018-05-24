@@ -75,13 +75,15 @@ class ServiceSearch extends Service
 		    );
 
 		    $query->leftJoin('`order`',
-			    "`order`.box_id = {$this->box_id} and ("
+			    "`order`.box_id = {$this->box_id} and `order`.date_start='{$this->service_date}' and `order`.status='".Order::STATUS_BUSY."' and ("
 			    ."('{$this->service_time_start}' > `order`.time_start and '{$this->service_time_start}' < `order`.time_end)"
 			    ." or "
 			    ."(ADDTIME('{$this->service_time_start}', `service`.time_processing) > CONVERT(`order`.time_start USING utf8) and ADDTIME('{$this->service_time_start}', `service`.time_processing) < CONVERT(`order`.time_end USING utf8))"
+			    ." or "
+			    ."'{$this->service_time_start}' = `order`.time_start OR ADDTIME('{$this->service_time_start}', `service`.time_processing) = CONVERT(`order`.time_end USING utf8)"
 			    .")"
 		    );
-		    $query->andWhere("order.id IS NULL");
+		    $query->andWhere("`order`.id IS NULL");
 
 	    }
         // grid filtering conditions

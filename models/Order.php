@@ -26,6 +26,10 @@ use Yii;
  */
 class Order extends \yii\db\ActiveRecord
 {
+	const STATUS_BUSY = 'busy';
+	const STATUS_SUCCESS = 'success';
+	const STATUS_CANCEL = 'cancel';
+
 	public $date_time_start;
     /**
      * {@inheritdoc}
@@ -111,7 +115,7 @@ class Order extends \yii\db\ActiveRecord
 			$boxesArray[$box->id]['date_start'] = $date;
 			$boxOrdersArray = [];
 			/** @var Order[] $boxOrders */
-			$boxOrders = Order::find()->where(['box_id'=>$box->id, 'date_start'=>$date])->orderBy(['time_start'=>SORT_ASC])->all();
+			$boxOrders = Order::find()->where(['box_id'=>$box->id, 'date_start'=>$date, 'status'=>Order::STATUS_BUSY])->orderBy(['time_start'=>SORT_ASC])->all();
 			$orderTimeStart = $box->time_start;
 			$orderTimeEnd = $box->time_end;
 			foreach ($boxOrders as $boxOrder){
@@ -119,7 +123,7 @@ class Order extends \yii\db\ActiveRecord
 				if ($boxOrder->time_start > $orderTimeStart) {
 					$boxOrdersArray[] = [
 						'time_start' => date("H:i", strtotime($orderTimeStart)),
-						'time_end' => date("H:i", strtotime($boxOrder->time_end))
+						'time_end' => date("H:i", strtotime($boxOrder->time_start))
 					];
 				}
 				$boxOrdersArray[] = [
