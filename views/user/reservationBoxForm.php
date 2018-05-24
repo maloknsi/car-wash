@@ -20,7 +20,7 @@ use yii\widgets\Pjax;
 			<div class="panel-heading">Ваши заказы</div>
 			<div class="panel-body">
 				<div class="col-xs-12">
-					<? Pjax::begin(['id' => 'my-services-timetable-pjax', 'timeout' => 7000, 'enablePushState' => false, 'clientOptions' => ['method' => 'POST']]); ?>
+					<?php Pjax::begin(['id' => 'my-services-timetable-pjax', 'timeout' => 7000, 'enablePushState' => false, 'clientOptions' => ['method' => 'POST']]); ?>
 					<?= GridView::widget([
 						'id' => 'my-services-timetable-grid',
 						'layout' => "{items}\n{pager}\n{summary}",
@@ -78,7 +78,7 @@ use yii\widgets\Pjax;
 							],
 						],
 					]); ?>
-					<? Pjax::end(); ?>
+					<?php Pjax::end(); ?>
 				</div>
 			</div>
 		</div>
