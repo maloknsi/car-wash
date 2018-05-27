@@ -65,26 +65,33 @@ class ServiceSearch extends Service
         // for select Box Available Services
 	    if ($this->date_time_start){
 
-	    	$this->service_time_start = date('H:i', strtotime($this->date_time_start));
-		    $this->service_date = date('Y-m-d', strtotime($this->date_time_start));
+	    	if (
+	    		(date('Y-m-d') > date('Y-m-d', strtotime($this->date_time_start))) ||
+			    (date('Y-m-d') == date('Y-m-d', strtotime($this->date_time_start)) && date('H:i')>date('H:i', strtotime($this->date_time_start)))
+		    ){
+			    // нет услуг для прошлой даты, прошлого времени
+			    $query->where('0=1');
+		    } else {
+			    $this->service_time_start = date('H:i', strtotime($this->date_time_start));
+			    $this->service_date = date('Y-m-d', strtotime($this->date_time_start));
 
-		    $query->innerJoin('box',
-			    "box.id = {$this->box_id}"
-			    ." and box.time_start <= '{$this->service_time_start}'"
-			    ." and CONVERT(box.time_end USING utf8) >= ADDTIME('{$this->service_time_start}', service.time_processing)"
-		    );
+			    $query->innerJoin('box',
+				    "box.id = {$this->box_id}"
+				    ." and box.time_start <= '{$this->service_time_start}'"
+				    ." and CONVERT(box.time_end USING utf8) >= ADDTIME('{$this->service_time_start}', service.time_processing)"
+			    );
 
-		    $query->leftJoin('`order`',
-			    "`order`.box_id = {$this->box_id} and `order`.date_start='{$this->service_date}' and `order`.status='".Order::STATUS_BUSY."' and ("
-			    ."('{$this->service_time_start}' > `order`.time_start and '{$this->service_time_start}' < `order`.time_end)"
-			    ." or "
-			    ."(ADDTIME('{$this->service_time_start}', `service`.time_processing) > CONVERT(`order`.time_start USING utf8) and ADDTIME('{$this->service_time_start}', `service`.time_processing) < CONVERT(`order`.time_end USING utf8))"
-			    ." or "
-			    ."'{$this->service_time_start}' = `order`.time_start OR ADDTIME('{$this->service_time_start}', `service`.time_processing) = CONVERT(`order`.time_end USING utf8)"
-			    .")"
-		    );
-		    $query->andWhere("`order`.id IS NULL");
-
+			    $query->leftJoin('`order`',
+				    "`order`.box_id = {$this->box_id} and `order`.date_start='{$this->service_date}' and `order`.status='".Order::STATUS_BUSY."' and ("
+				    ."('{$this->service_time_start}' > `order`.time_start and '{$this->service_time_start}' < `order`.time_end)"
+				    ." or "
+				    ."(ADDTIME('{$this->service_time_start}', `service`.time_processing) > CONVERT(`order`.time_start USING utf8) and ADDTIME('{$this->service_time_start}', `service`.time_processing) < CONVERT(`order`.time_end USING utf8))"
+				    ." or "
+				    ."'{$this->service_time_start}' = `order`.time_start OR ADDTIME('{$this->service_time_start}', `service`.time_processing) = CONVERT(`order`.time_end USING utf8)"
+				    .")"
+			    );
+			    $query->andWhere("`order`.id IS NULL");
+		    }
 	    }
         // grid filtering conditions
         $query->andFilterWhere([

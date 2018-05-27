@@ -2,7 +2,7 @@
 
 namespace app\models;
 
-use Yii;
+use app\helpers\OrderHelper;
 
 /**
  * This is the model class for table "user_service".
@@ -45,10 +45,14 @@ class Order extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['service_id', 'box_id', 'date_start', 'time_start', 'time_end', 'money_cost', 'user_id'], 'required'],
             [['service_id', 'user_id', 'box_id', 'status'], 'integer'],
             [['created_at', 'updated_at', 'date_start', 'time_start', 'time_end', 'date_time_start'], 'safe'],
             [['money_cost'], 'number'],
+
+	        [['date_start'], 'checkAvailableDateTimeSubmit'],
+
+	        [['service_id', 'box_id', 'date_start', 'time_start', 'time_end', 'money_cost', 'user_id'], 'required'],
+
             [['box_id'], 'exist', 'skipOnError' => true, 'targetClass' => Box::className(), 'targetAttribute' => ['box_id' => 'id']],
             [['service_id'], 'exist', 'skipOnError' => true, 'targetClass' => Service::className(), 'targetAttribute' => ['service_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
@@ -75,6 +79,41 @@ class Order extends \yii\db\ActiveRecord
             'date_time_start' => 'Время записи',
         ];
     }
+	public function checkAvailableDateTimeSubmit($attribute_name, $params)
+	{
+		$return = true;
+		// ошибка если выбранная дата старше текущей
+		if (date('Y-m-d') > date('Y-m-d',strtotime($this->date_start))) {
+			$this->addError('date_time_start', 'Нельзя бронировать прошедшую дату, выберите дату не старше ['.date('Y-m-d').']');
+			$return =  false;
+		}
+		// ошибка если выбрана текущая дата но выбранное время больше текущего
+		if ($return && (date('Y-m-d') == date('Y-m-d',strtotime($this->date_start)) && date('H:i')>date('H:i', strtotime($this->time_start)))) {
+			$this->addError('date_time_start', 'Нельзя бронировать прошедшее время, выберите время не ранее ['.OrderHelper::GetRoundUpTimeStart(strtotime('NOW')).']');
+			$return =  false;
+		}
+		// Если с проверками все нормально - проверяем время работы бокса
+		if ($return){
+			if ($this->time_start < date('H:i', strtotime($this->box->time_start)) || $this->time_end > date('H:i', strtotime($this->box->time_end))){
+				$this->addError('date_time_start', "Данное время выходит за рамки времени работы бокса [{$this->box->time_start} - {$this->box->time_end}], выберите другое время");
+				$return = false;
+			}
+		}
+		// Если с проверками на дату все нормально - проверяем занятость другими заказами
+		if ($return){
+			/** @var Order $orderBusy */
+			$orderBusy = Order::find()
+				->where(['date_start'=>$this->date_start, 'box_id'=>$this->box_id, 'status'=>Order::STATUS_BUSY])
+				->andWhere(['OR',['BETWEEN','time_start', $this->time_start, $this->time_end],['BETWEEN','time_end', $this->time_start, $this->time_end]])
+				//->where(['OR',['AND',[$a=>1],[$b=>1]],['AND',[$c=>1],[$d=>1]]])
+				->limit(1)->one();
+			if ($orderBusy) {
+				$this->addError('date_time_start', "Данное время уже зарезервировано другим заказом [{$orderBusy->time_start} - {$orderBusy->time_end}], выберите другое время");
+				$return = false;
+			}
+		}
+		return $return;
+	}
 
     /**
      * @return \yii\db\ActiveQuery
@@ -101,22 +140,26 @@ class Order extends \yii\db\ActiveRecord
     }
 
 	/**
-	 * @param null $date
+	 * @param null $dateStart
 	 * @return array
 	 */
-	public static function getBoxTimetableArray($date = null)
+	public static function getBoxTimetableArray($dateStart = null)
 	{
-		if (!$date) $date = date('Y-m-d');
+		if (!$dateStart) $dateStart = date('Y-m-d');
 		$boxesArray = [];
 		/** @var Box[] $boxes */
 		$boxes = Box::find()->all();
 		foreach ($boxes as $box){
 			$boxesArray[$box->id]['title'] = $box->title;
-			$boxesArray[$box->id]['date_start'] = $date;
+			$boxesArray[$box->id]['date_start'] = $dateStart;
 			$boxOrdersArray = [];
 			/** @var Order[] $boxOrders */
-			$boxOrders = Order::find()->where(['box_id'=>$box->id, 'date_start'=>$date, 'status'=>Order::STATUS_BUSY])->orderBy(['time_start'=>SORT_ASC])->all();
+			$boxOrders = Order::find()->where(['box_id'=>$box->id, 'date_start'=>$dateStart, 'status'=>Order::STATUS_BUSY])->orderBy(['time_start'=>SORT_ASC])->all();
+			// начало записи - начало работы бокса либо текущее время +5минут с округлением до 5 минут в большую сторону
 			$orderTimeStart = $box->time_start;
+			if ($dateStart == date('Y-m-d') && date('H:i:s') > $box->time_start){
+				$orderTimeStart = OrderHelper::GetRoundUpTimeStart(strtotime('NOW'));
+			}
 			$orderTimeEnd = $box->time_end;
 			foreach ($boxOrders as $boxOrder){
 				// добавляем пустую запись если есть свободное время от начала работы бокса до времени заказа
@@ -126,6 +169,8 @@ class Order extends \yii\db\ActiveRecord
 						'time_end' => date("H:i", strtotime($boxOrder->time_start))
 					];
 				}
+				$orderTimeStart = OrderHelper::GetRoundUpTimeStart(strtotime($boxOrder->time_end));
+				// добавляем запись уже существующего заказа
 				$boxOrdersArray[] = [
 					'order_id' => $boxOrder->id,
 					'date_start' => date("Y-m-d", strtotime($boxOrder->date_start)),
@@ -136,11 +181,10 @@ class Order extends \yii\db\ActiveRecord
 					'service_id' => $boxOrder->service_id,
 					'status' => $boxOrder->status,
 				];
-				$orderTimeStart = $boxOrder->time_end;
 			}
 			// добавляем пустую запись если есть свободное время от окончания последнего заказа до окончания работы бокса
 			// данное условеи на удивление правильно сработает и для бокса без заказов
-			if ($orderTimeStart != $orderTimeEnd) {
+			if ($orderTimeStart != $orderTimeEnd && $orderTimeEnd > $orderTimeStart) {
 				$boxOrdersArray[] = [
 					'time_start' => date("H:i", strtotime($orderTimeStart)),
 					'time_end' => date("H:i", strtotime($orderTimeEnd))

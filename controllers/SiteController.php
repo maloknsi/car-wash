@@ -178,7 +178,13 @@ class SiteController extends CController
 			$model->money_cost = $model->service->money_cost;
 			$model->date_start = date('Y-m-d', strtotime($model->date_time_start));
 			$model->time_start = date('H:i', strtotime($model->date_time_start));
-			$model->time_end = date('H:i', strtotime($model->time_start) + strtotime($model->service->time_processing) - strtotime("00:00:00"));
+
+			$timeEnd = strtotime($model->time_start) + strtotime($model->service->time_processing) - strtotime("00:00:00");
+			// проверка переполнения времени
+			if (date('Y-m-d',strtotime(strtotime($model->date_time_start))) != date('Y-m-d', $timeEnd)){
+				$timeEnd = strtotime("23:59:59");
+			}
+			$model->time_end = date('H:i', $timeEnd);
 			if (User::checkAccess([User::ROLE_USER])){
 			}
 			if ($model->validate() && $model->save()){
