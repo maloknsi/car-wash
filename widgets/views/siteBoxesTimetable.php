@@ -5,7 +5,7 @@ use yii\helpers\Url;
 use yii\widgets\Pjax;
 
 ?>
-<?php Pjax::begin(['id' => 'site-boxes-timetable-pjax', 'timeout' => 7000, 'enablePushState' => false,'clientOptions' => ['method' => 'POST']]); ?>
+<?php Pjax::begin(['id' => 'site-boxes-timetable-pjax', 'timeout' => 7000, 'enablePushState' => false,'enableReplaceState' => false,'clientOptions' => ['method' => 'POST']]); ?>
 <?php foreach ($boxesTimetable as $boxId => $boxTimetable): ?>
 	<div class="col-xs-12 col-sm-6 col-md-4">
 		<div class="panel panel-info">

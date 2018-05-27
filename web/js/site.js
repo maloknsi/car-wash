@@ -102,21 +102,35 @@ jQuery(document).ready(function () {
 	});
 
 
-	$(document).ready(function(){
-		$(".scroll").on("click","a", function (event) {
-			//отменяем стандартную обработку нажатия по ссылке
-			event.preventDefault();
+	$(".scroll").on("click","a", function (event) {
+		//отменяем стандартную обработку нажатия по ссылке
+		event.preventDefault();
 
-			//забираем идентификатор бока с атрибута href
-			var id  = $(this).attr('href'),
+		//забираем идентификатор бока с атрибута href
+		var id  = $(this).attr('href'),
 
-				//узнаем высоту от начала страницы до блока на который ссылается якорь
-				top = $(id).offset().top;
+			//узнаем высоту от начала страницы до блока на который ссылается якорь
+			top = $(id).offset().top;
 
-			//анимируем переход на расстояние - top за 1500 мс
-			$('body,html').animate({scrollTop: top}, 500);
-		});
+		//анимируем переход на расстояние - top за 1500 мс
+		$('body,html').animate({scrollTop: top}, 500);
 	});
 
+	$(document).on("beforeSubmit", "#reservation-form", function () {
+		setTimeout(function() {
+			$.pjax.reload({container:'#site-boxes-timetable-pjax', url: "/site/index/", 'push':false, 'replace': false});
+		}, 500);
+	});
 
+	$('#site-boxes_timetable_date').on('change', function () {
+		$.pjax.reload({container:'#site-boxes-timetable-pjax', url: "/site/index/", 'push':false, 'replace': false});
+	});
+
+	$('#site-boxes-timetable-pjax').on('pjax:beforeSend', function (e, jqXHR, settings) {
+		settings.url = settings.url + '&date_start='+$('#site-boxes_timetable_date').val();
+	});
+
+	$(document).on('click', '.reload-siteBoxesTimetable button.close, .reload-siteBoxesTimetable  button.btn-close', function () {
+		$.pjax.reload({container:'#site-boxes-timetable-pjax', url: "/site/index/", 'push':false, 'replace': false});
+	});
 });

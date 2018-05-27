@@ -130,7 +130,7 @@ use yii\widgets\Pjax;
 				<?= $form->field($order, 'id')->hiddenInput()->label(''); ?>
 				<?= $form->field($order, 'box_id')->hiddenInput(['id'=>'order-box_id'])->label(''); ?>
 				<?= Html::submitButton($order->isNewRecord ? 'Записаться' : 'Обновить', ['value' => Url::to(['edit']), 'title' => 'Подтвердить действие', 'class' => 'showModalButton btn btn-success']); ?>
-				<?= Html::button('Отмена', ['class' => 'btn grey-mint', 'data-dismiss' => "modal"]); ?>
+				<?= Html::button('Отмена', ['class' => 'btn grey-mint btn-reload-site-boxes-timetable', 'data-dismiss' => "modal"]); ?>
 			</div>
 		</div>
 	</div>
@@ -140,7 +140,7 @@ use yii\widgets\Pjax;
 $script = <<< JS
 	$("document").ready(function(){
 		$('#order-date_time_start').on('change', function () {
-			$.pjax.reload({container:'#services-timetable-pjax', url: "/site/get-reservation-box-form"});
+			$.pjax.reload({container:'#services-timetable-pjax', url: "/site/get-reservation-box-form", 'push':false, 'replace': false});
 		});
 		$('#services-timetable-pjax').on('pjax:beforeSend', function (e, jqXHR, settings) {
 			settings.url = settings.url + '&s[date_time_start]='+$('#order-date_time_start').val()+'&s[box_id]='+$('#order-box_id').val();
@@ -149,3 +149,6 @@ $script = <<< JS
 JS;
 $this->registerJs($script);
 ?>
+<script>
+	$('#my-services-timetable-grid').parents('div#modal-form-ajax').addClass('reload-siteBoxesTimetable');
+</script>

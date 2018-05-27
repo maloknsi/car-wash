@@ -100,10 +100,7 @@ use yii\widgets\Pjax;
 </div>
 <script>
 	$("document").ready(function(){
-		$('#modal-form-ajax button.close, #modal-form-ajax  button.btn-close').on('click', function () {
-			$(this).off('click');
-			$.pjax.reload({container:'#site-boxes-timetable-pjax', url: "/site/index/", 'push':false, 'replace': false});
-		});
+		$('#my-services-timetable-grid').parents('div#modal-form-ajax').addClass('reload-siteBoxesTimetable');
 		if (!$('#btn-get_my_reservation_form').attr('form-loaded')){
 			$('#btn-get_my_reservation_form').attr('form-loaded', true);
 			$('#btn-get_my_reservation_form').attr('data-action-url', $('#btn-get_my_reservation_form').attr('data-action-url') + '?no-pjax=1');

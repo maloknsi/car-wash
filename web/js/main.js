@@ -29,7 +29,7 @@ jQuery(document).ready(function () {
 		var form = $(this),
 			modalForm = form.attr('data-modal-form');
 		if ($(modalForm).hasClass('disabled')) return false;
-		$(modalForm).addClass('disabled');
+			$(modalForm).addClass('disabled');
 		jQuery.ajax({
 			url: form.attr('action'),
 			type: "POST",
@@ -40,8 +40,8 @@ jQuery(document).ready(function () {
 			processData: false,
 			success: function(response) {
 				if (response.error){
-					form.find('.error-summary').html(response.error).show();
 					$(modalForm).removeClass('disabled');
+					form.find('.error-summary').html(response.error).show();
 				}else{
 					$(modalForm).removeClass('disabled');
 					$(modalForm).find('.modal-content .modal-body').html('');
@@ -117,17 +117,4 @@ jQuery(document).ready(function () {
 			}
 		});
 	});
-	$(document).on("beforeSubmit", "#reservation-form", function () {
-		setTimeout(function() {
-			console.log(1);
-			$.pjax.reload({container:'#site-boxes-timetable-pjax', url: "/site/index"});
-		}, 500);
-	});
-	$('#site-boxes_timetable_date').on('change', function () {
-		$.pjax.reload({container:'#site-boxes-timetable-pjax', url: "/site/index"});
-	});
-	$('#site-boxes-timetable-pjax').on('pjax:beforeSend', function (e, jqXHR, settings) {
-		settings.url = settings.url + '&date_start='+$('#site-boxes_timetable_date').val();
-	});
-
 });
