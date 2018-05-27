@@ -37,7 +37,8 @@ $this->title = $this->context->title;
 							<?= Html::a('<i class="fa fa-user-md"></i><span style="margin-left: 5px">'.(!Yii::$app->user->isGuest ? Yii::$app->user->identity->username : '').'</span>', '#', [
 								'title' => 'Личный кабинет',
 								'class' => 'btn-show-modal-form',
-								'data-action-url' => Url::to(['site/get-my-reservation-form']),
+								'id' => 'btn-get_my_reservation_form',
+								'data-action-url' => Url::to(['site/get-my-reservation-form/']),
 							]) ?>
 							<?= Html::a('<i class="fa fa-sign-out"></i>', Url::to(['/logout']), [
 								'title' => 'Выйти',

@@ -53,7 +53,6 @@ class SiteController extends CController
 	 */
 	public function actionIndex()
 	{
-		#var_dump(Order::getBoxTimetableArray());die();
 		return $this->render('index');
 	}
 
@@ -149,7 +148,11 @@ class SiteController extends CController
 			],
 			'sort' => false
 		]);
-		return $this->renderAjax('/user/reservationBoxForm', ['orders' => $dataProvider]);
+		if (\Yii::$app->request->get('no-pjax')){
+			return $this->renderPartial('/user/myReservationBoxForm', ['orders' => $dataProvider]);
+		} else {
+			return $this->renderAjax('/user/myReservationBoxForm', ['orders' => $dataProvider]);
+		}
 	}
 
 	/**
