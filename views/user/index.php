@@ -31,12 +31,7 @@ use yii\widgets\Pjax;
 	        [
 		        'attribute' => 'role',
 		        'content' => function ($data) {	return User::getRoleLabel($data->role);},
-		        'filter' => Html::activeDropDownList(
-			        $searchModel,
-			        'role',
-			        ArrayHelper::merge(array('' => ''), User::getRoles()),
-			        ['class' => 'form-control']
-		        ),
+		        'filter' => ArrayHelper::merge(array('' => ''), User::getRoles()),
 		        'headerOptions'=>['style'=>'min-width: 125px;']
 	        ],
 	        'last_name',
