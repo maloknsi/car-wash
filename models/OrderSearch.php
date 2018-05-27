@@ -16,8 +16,9 @@ class OrderSearch extends Order
     public function rules()
     {
         return [
-            [['id', 'service_id', 'user_id', 'box_id', 'status'], 'integer'],
-            [['created_at', 'updated_at', 'date_start', 'time_start', 'time_end'], 'safe'],
+            [['id', 'service_id', 'user_id', 'box_id'], 'integer'],
+	        [['status'], 'string'],
+	        [['created_at', 'updated_at', 'date_start', 'time_start', 'time_end'], 'safe'],
             [['money_cost'], 'number'],
         ];
     }
@@ -40,7 +41,7 @@ class OrderSearch extends Order
      */
     public function search($params)
     {
-        $query = Order::find();
+        $query = Order::find()->orderBy(['date_start'=>SORT_DESC,'time_start'=>SORT_DESC]);
 
         // add conditions that should always apply here
 

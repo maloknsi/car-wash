@@ -33,31 +33,6 @@ abstract class CController extends Controller
 	/** @var $ajaxResult AjaxResult */
 	public $ajaxResult;
 
-	public function behaviors()
-	{
-		return ArrayHelper::merge(
-			parent::behaviors(),
-			[
-				'access' => [
-					'class' => AccessControl::class,
-					'only' => ['login', 'logout'],
-					'rules' => [
-						[
-							'allow' => true,
-							'actions' => ['login'],
-							'roles' => ['?'],
-						],
-						[
-							'allow' => true,
-							'actions' => ['logout'],
-							'roles' => ['@'],
-						],
-					],
-				],
-			]
-		);
-	}
-
 	/**
 	 * @return array
 	 */
@@ -134,8 +109,8 @@ abstract class CController extends Controller
 			];
 			// set menu items for users
 			if (!Yii::$app->user->isGuest) {
-				if (User::checkAccess([User::ROLE_ADMIN, User::ROLE_USER, User::ROLE_OPERATOR])) {
-					//$this->menuItems['api-push'] = $menuItems['api-push'];
+				if (User::checkAccess([User::ROLE_OPERATOR])) {
+					$this->menuItems['orders'] = ['label' => 'Заказы', 'url' => ['/order']];
 				}
 				if (User::checkAccess([User::ROLE_ADMIN])) {
 					$this->menuItems['control'] = $menuItems['control'];

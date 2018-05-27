@@ -17,7 +17,7 @@ class ReviewHelper
 	 * @param $status
 	 * @return string
 	 */
-	public static function GetStatusText($status)
+	public static function getStatusText($status)
 	{
 		$result = '';
 		if (isset(self::$statuses[$status])) $result = self::$statuses[$status];

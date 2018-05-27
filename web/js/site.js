@@ -82,7 +82,7 @@ jQuery(document).ready(function () {
 					$(modalForm).removeClass('disabled');
 				} else {
 					if (response.data == 'admin'){
-						window.location = '/user'
+						window.location = '/order'
 					}
 					$(modalForm).removeClass('disabled');
 					$(modalForm).find('.modal-content .modal-body').html('');

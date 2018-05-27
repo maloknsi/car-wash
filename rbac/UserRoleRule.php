@@ -14,12 +14,15 @@ class UserRoleRule extends Rule
 	{
 		//Получаем массив пользователя из базы
 		$user = ArrayHelper::getValue($params, 'user', User::findOne($user));
+		//echo "$item->name : $user->role; "; //die();
 		if ($user) {
 			$role = $user->role; //Значение из поля role базы данных
 			if ($item->name === 'admin') {
 				return $role == User::ROLE_ADMIN;
+			} elseif ($item->name === 'operator') {
+				return $role == User::ROLE_ADMIN || $role == User::ROLE_OPERATOR;
 			} elseif ($item->name === 'user') {
-				return $role == User::ROLE_ADMIN || $role == User::ROLE_USER;
+				return $role == User::ROLE_ADMIN || $role == User::ROLE_OPERATOR || $role == User::ROLE_USER;
 			}
 		}
 		return false;

@@ -23,23 +23,27 @@ class SiteController extends CController
 			[
 				'access' => [
 					'class' => AccessControl::class,
-					'only' => ['index', 'get-reservation-box-form', 'set-reservation-box', 'get-my-reservation-form'],
 					'rules' => [
 						[
 							'allow' => true,
-							'actions' => ['index', 'get-reservation-box-form'],
+							'actions' => ['login'],
+							'roles' => ['?'],
+						],
+						[
+							'allow' => true,
+							'actions' => ['index', 'get-reservation-box-form', 'send-review', 'send-review-validate'],
 							'roles' => [],
 						],
 						[
 							'allow' => true,
-							'actions' => ['set-reservation-box','get-my-reservation-form'],
+							'actions' => ['logout','set-reservation-box','get-my-reservation-form', 'cancel-my-reservation'],
 							'roles' => ['@'],
 						],
 					],
 				],
 				[
 					'class' => 'yii\filters\AjaxFilter',
-					'only' => ['login', 'get-reservation-box-form', 'get-box-timetable', 'get-my-reservation-form'],
+					'only' => ['login', 'get-reservation-box-form', 'get-box-timetable', 'get-my-reservation-form', 'send-review', 'send-review-validate'],
 					'errorMessage' => 'Ошибка типа запорса (AJAX ONLY!)',
 				],
 			]
@@ -179,9 +183,9 @@ class SiteController extends CController
 			$model->date_start = date('Y-m-d', strtotime($model->date_time_start));
 			$model->time_start = date('H:i', strtotime($model->date_time_start));
 
-			$timeEnd = strtotime($model->time_start) + strtotime($model->service->time_processing) - strtotime("00:00:00");
+			$timeEnd = strtotime($model->date_time_start) + strtotime($model->service->time_processing) - strtotime("00:00:00");
 			// проверка переполнения времени
-			if (date('Y-m-d',strtotime(strtotime($model->date_time_start))) != date('Y-m-d', $timeEnd)){
+			if (date('Y-m-d',strtotime($model->date_time_start)) != date('Y-m-d', $timeEnd)){
 				$timeEnd = strtotime("23:59:59");
 			}
 			$model->time_end = date('H:i', $timeEnd);
@@ -205,4 +209,16 @@ class SiteController extends CController
 
 		return $this->goHome();
 	}
+
+	/**
+	 * @param $id
+	 * @return Response
+	 */
+	public function actionCancelMyReservation($id)
+	{
+		Order::updateAll(['status'=>Order::STATUS_CANCEL],['id'=>$id, 'user_id'=>\Yii::$app->user->id]);
+		$this->ajaxResult->data = "Заказ отменен";
+	}
+
+
 }

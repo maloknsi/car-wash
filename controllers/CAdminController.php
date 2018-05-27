@@ -19,15 +19,12 @@ abstract class CAdminController extends CController
 
 	public function behaviors()
 	{
-		return ArrayHelper::merge(
-			parent::behaviors(),
-			[
+		return [
 				'access' => [
 					'class' => AccessControl::class,
-					'only' => ['index' ,'edit','validate','save','delete'],
 					'rules' => [
 						[
-							'actions' => ['index' ,'edit','validate','save','delete'],
+							'actions' => ['index' ,'edit','validate','save','delete','logout'],
 							'allow' => true,
 							'roles' => ['admin'],
 						],
@@ -44,7 +41,7 @@ abstract class CAdminController extends CController
 						'delete' => ['post'],
 					],
 				],
-			]);
+			];
 	}
 
 	/**

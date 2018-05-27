@@ -18,7 +18,7 @@ class OrderHelper
 	 * @param $status
 	 * @return string
 	 */
-	public static function GetStatusText($status)
+	public static function getStatusText($status)
 	{
 		$result = '';
 		if (isset(self::$statuses[$status])) $result = self::$statuses[$status];
@@ -29,9 +29,9 @@ class OrderHelper
 	 * @param $status
 	 * @return string
 	 */
-	public static function GetStatusTextForClient($status)
+	public static function getStatusTextForClient($status)
 	{
-		$result = self::GetStatusText($status);
+		$result = self::getStatusText($status);
 		if ($status == Order::STATUS_BUSY) $result = 'Отменить';
 		return $result;
 	}
@@ -39,7 +39,7 @@ class OrderHelper
 	 * @param $timeStart
 	 * @return string
 	 */
-	public static function GetRoundUpTimeStart($timeStart)
+	public static function getRoundUpTimeStart($timeStart)
 	{
 		$roundUpTimeStart = strtotime('+5 minutes', $timeStart);
 		$roundUpMinutesRest = date('i',$roundUpTimeStart)%5;
@@ -54,7 +54,7 @@ class OrderHelper
 	 * @param $model Order
 	 * @return string
 	 */
-	public static function GetStatusClassForClient($model)
+	public static function getStatusClassForClient($model)
 	{
 		/**
 		 * @return string
@@ -62,7 +62,10 @@ class OrderHelper
 		switch ($model->status) {
 			case Order::STATUS_BUSY:
 				// можно отменить только если время бронирования больше текущего времени (+5минут)
-				if (date('Y-m-d') == $model->date_start && date('H:i', strtotime('+5 minutes')) <=  $model->time_start){
+				if (
+					$model->date_start > date('Y-m-d') ||
+					(date('Y-m-d') == $model->date_start && date('H:i', strtotime('+5 minutes')) <=  $model->time_start))
+				{
 					$result = "btn-show-confirm-form btn-danger";
 				} else {
 					$result = "btn-default disabled";

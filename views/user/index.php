@@ -37,7 +37,7 @@ use yii\widgets\Pjax;
 			        ArrayHelper::merge(array('' => ''), User::getRoles()),
 			        ['class' => 'form-control']
 		        ),
-		        'contentOptions'=>['style'=>'min-width: 125px;']
+		        'headerOptions'=>['style'=>'min-width: 125px;']
 	        ],
 	        'last_name',
 	        'first_name',
@@ -52,7 +52,7 @@ use yii\widgets\Pjax;
 			        ArrayHelper::merge(array('' => ''), User::getStatuses()),
 			        ['class' => 'form-control']
 		        ),
-		        'contentOptions'=>['style'=>'min-width: 155px;']
+		        'headerOptions'=>['style'=>'min-width: 155px;']
 	        ],
 
 	        'created_at',

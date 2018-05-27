@@ -17,17 +17,15 @@ class OrderController extends CAdminController
 {
 	public function behaviors()
 	{
-		return ArrayHelper::merge(
-			parent::behaviors(),
+		return
 			[
 				'access' => [
 					'class' => AccessControl::class,
-					'only' => ['delete'],
 					'rules' => [
 						[
-							'actions' => ['delete'],
+							'actions' => ['index' ,'edit','validate','save','delete'],
 							'allow' => true,
-							'roles' => ['@'],
+							'roles' => ['operator'],
 						],
 					],
 				],
@@ -36,13 +34,7 @@ class OrderController extends CAdminController
 					'only' => ['delete'],
 					'errorMessage' => 'Ошибка типа запорса (AJAX ONLY!)',
 				],
-				'verbs' => [
-					'class' => VerbFilter::className(),
-					'actions' => [
-						'delete' => ['post'],
-					],
-				],
-			]);
+			];
 	}
 
 	public function getNewModel($isModelSearch = false)
@@ -77,5 +69,4 @@ class OrderController extends CAdminController
 		Order::updateAll(['status'=>Order::STATUS_CANCEL],['id'=>$id]);
 		$this->ajaxResult->data = "Заказ отменен";
 	}
-
 }

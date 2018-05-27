@@ -33,7 +33,7 @@ use yii\widgets\Pjax;
 				'filter' => \app\helpers\ReviewHelper::$statuses,
 				'content' => function ($data) {
 					/** @var $data Review */
-					return \app\helpers\ReviewHelper::GetStatusText($data->status);
+					return \app\helpers\ReviewHelper::getStatusText($data->status);
 				},
 				'contentOptions' => ['class' => 'text-middle button-status'],
 			],

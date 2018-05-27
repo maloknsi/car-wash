@@ -1,7 +1,9 @@
 <?php
 
+use app\helpers\OrderHelper;
 use faryshta\widgets\JqueryClockPicker;
 use kartik\date\DatePicker;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
@@ -25,10 +27,10 @@ use yii\widgets\Pjax;
 			<div class="panel-heading"></div>
 			<div class="panel-body">
 				<div class="col-xs-4">
-					<?= $form->field($model, 'status')->textInput() ?>
+					<?= $form->field($model, 'status')->dropDownList(OrderHelper::$statuses) ?>
 				</div>
 				<div class="col-xs-4">
-					<?= $form->field($model, 'user_id')->textInput() ?>
+					<?= $form->field($model, 'user_id')->dropDownList(ArrayHelper::map(\app\models\User::find()->asArray()->all(), 'id', 'username')) ?>
 				</div>
 			</div>
 		</div>
@@ -89,13 +91,13 @@ use yii\widgets\Pjax;
 			<div class="panel-heading">Данные заказа</div>
 			<div class="panel-body">
 				<div class="col-xs-4">
-					<?= $form->field($model, 'service_id')->textInput() ?>
+					<?= $form->field($model, 'service_id')->dropDownList(ArrayHelper::map(\app\models\Service::find()->asArray()->all(), 'id', 'title')) ?>
 				</div>
 				<div class="col-xs-4">
 					<?= $form->field($model, 'money_cost')->textInput() ?>
 				</div>
 				<div class="col-xs-4">
-					<?= $form->field($model, 'box_id')->textInput() ?>
+					<?= $form->field($model, 'box_id')->dropDownList(ArrayHelper::map(\app\models\Box::find()->asArray()->all(), 'id', 'title')) ?>
 				</div>
 			</div>
 		</div>

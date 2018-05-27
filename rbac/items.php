@@ -1,8 +1,12 @@
 <?php
 return [
-    'dashboard' => [
+    'p_admin' => [
         'type' => 2,
-        'description' => 'Админ панель',
+        'description' => 'Админка',
+    ],
+    'p_operator' => [
+        'type' => 2,
+        'description' => 'Операторская',
     ],
     'user' => [
         'type' => 1,
@@ -15,7 +19,7 @@ return [
         'ruleName' => 'userRole',
         'children' => [
             'user',
-            'dashboard',
+            'p_operator',
         ],
     ],
     'admin' => [
@@ -23,6 +27,7 @@ return [
         'description' => 'Админ',
         'ruleName' => 'userRole',
         'children' => [
+            'p_admin',
             'operator',
         ],
     ],

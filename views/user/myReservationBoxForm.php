@@ -75,12 +75,12 @@ use yii\widgets\Pjax;
 								'buttons' => [
 									'delete' => function ($url, $model) {
 										/** @var Order $model */
-										return Html::a(OrderHelper::GetStatusTextForClient($model->status),
+										return Html::a(OrderHelper::getStatusTextForClient($model->status),
 											'javascript:;', [
-												'title' => 'Статус заказа',
+												'title' => 'Отменить заказ',
 												'data-pjax' => false,
-												'class' => 'btn btn-md col-md-12 ' . OrderHelper::GetStatusClassForClient($model),
-												'data-action-url' => Url::to(['/order/delete', 'id' => $model->id]),
+												'class' => 'btn btn-md col-md-12 ' . OrderHelper::getStatusClassForClient($model),
+												'data-action-url' => Url::to(['/site/cancel-my-reservation', 'id' => $model->id]),
 											]);
 									},
 								],
