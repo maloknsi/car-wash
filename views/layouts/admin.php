@@ -3,6 +3,7 @@
 /* @var $this \yii\web\View */
 /* @var $content string */
 
+use app\assets\AdminAsset;
 use app\assets\BootboxAsset;
 use app\widgets\Alert;
 use yii\bootstrap\Modal;
@@ -12,7 +13,7 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 
-AppAsset::register($this);
+AdminAsset::register($this);
 BootboxAsset::overrideSystemConfirm();
 $this->registerAssetBundle(skinka\widgets\gritter\GritterAsset::className());
 $this->title = $this->context->title;

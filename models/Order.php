@@ -26,9 +26,9 @@ use app\helpers\OrderHelper;
  */
 class Order extends \yii\db\ActiveRecord
 {
-	const STATUS_BUSY = 'busy';
-	const STATUS_SUCCESS = 'success';
-	const STATUS_CANCEL = 'cancel';
+	const STATUS_BUSY = 0;
+	const STATUS_SUCCESS = 1;
+	const STATUS_CANCEL = 2;
 
 	public $date_time_start;
     /**
@@ -154,8 +154,11 @@ class Order extends \yii\db\ActiveRecord
 		foreach ($boxes as $box){
 			$boxesArray[$box->id]['title'] = $box->title;
 			$boxesArray[$box->id]['date_start'] = $dateStart;
+			$boxesArray[$box->id]['time_start'] = $box->time_start;
+			$boxesArray[$box->id]['time_end'] = $box->time_end;
+			$boxesArray[$box->id]['can_order'] = 0;
 			$boxOrdersArray = [];
-			/** @var Order[] $boxOrders */
+			/** @var Order[] $boxOrders */ //,
 			$boxOrders = Order::find()->where(['box_id'=>$box->id, 'date_start'=>$dateStart, 'status'=>Order::STATUS_BUSY])->orderBy(['time_start'=>SORT_ASC])->all();
 			// начало записи - начало работы бокса либо текущее время +5минут с округлением до 5 минут в большую сторону
 			$orderTimeStart = $box->time_start;
@@ -163,34 +166,37 @@ class Order extends \yii\db\ActiveRecord
 				$orderTimeStart = OrderHelper::getRoundUpTimeStart(strtotime('NOW'));
 			}
 			$orderTimeEnd = $box->time_end;
-			foreach ($boxOrders as $boxOrder){
-				// добавляем пустую запись если есть свободное время от начала работы бокса до времени заказа
-				if ($boxOrder->time_start > $orderTimeStart) {
-					$boxOrdersArray[] = [
-						'time_start' => date("H:i", strtotime($orderTimeStart)),
-						'time_end' => date("H:i", strtotime($boxOrder->time_start))
-					];
-				}
-				$orderTimeStart = OrderHelper::getRoundUpTimeStart(strtotime($boxOrder->time_end));
-				// добавляем запись уже существующего заказа
-				$boxOrdersArray[] = [
-					'order_id' => $boxOrder->id,
-					'date_start' => date("Y-m-d", strtotime($boxOrder->date_start)),
-					'time_start' => date("H:i", strtotime($boxOrder->time_start)),
-					'time_end' => date("H:i", strtotime($boxOrder->time_end)),
-					'money_cost' => $boxOrder->money_cost,
-					'user_id' => $boxOrder->user_id,
-					'service_id' => $boxOrder->service_id,
-					'status' => $boxOrder->status,
-				];
+			// перебираем по заказам
+            foreach ($boxOrders as $boxOrder){
+//                echo "orderTimeStart:{$orderTimeStart} [ ".date('H:i:s')." > {$boxOrder->time_end} ]<BR>";
+                if ($dateStart > date('Y-m-d') || ($dateStart == date('Y-m-d') && date('H:i:s') < $boxOrder->time_end)){
+                    // добавляем пустую запись вверху если есть свободное время от начала работы бокса до времени заказа
+                    if ($boxOrder->time_start > $orderTimeStart) {
+                        $boxOrdersArray[] = [
+                            'time_start' => date("H:i", strtotime($orderTimeStart)),
+                            'time_end' => date("H:i", strtotime($boxOrder->time_start))
+                        ];
+                    }
+                    $orderTimeStart = OrderHelper::getRoundUpTimeStart(strtotime($boxOrder->time_end));
+                    //$orderTimeEnd = OrderHelper::getRoundUpTimeStart(strtotime($boxOrder->time_end));
+                    // добавляем запись уже существующего заказа
+                    $boxOrdersArray[] = [
+                        'order_id' => $boxOrder->id,
+                        'date_start' => date("Y-m-d", strtotime($boxOrder->date_start)),
+                        'time_start' => date("H:i", strtotime($boxOrder->time_start)),
+                        'time_end' => date("H:i", strtotime($boxOrder->time_end)),
+                        'money_cost' => $boxOrder->money_cost,
+                        'user_id' => $boxOrder->user_id,
+                        'service_id' => $boxOrder->service_id,
+                        'status' => $boxOrder->status,
+                    ];
+                }
 			}
 			// добавляем пустую запись если есть свободное время от окончания последнего заказа до окончания работы бокса
-			// данное условеи на удивление правильно сработает и для бокса без заказов
 			if ($orderTimeStart != $orderTimeEnd && $orderTimeEnd > $orderTimeStart) {
-				$boxOrdersArray[] = [
-					'time_start' => date("H:i", strtotime($orderTimeStart)),
-					'time_end' => date("H:i", strtotime($orderTimeEnd))
-				];
+                $boxesArray[$box->id]['time_start'] = date("H:i", strtotime($orderTimeStart));
+                $boxesArray[$box->id]['time_end'] = date("H:i", strtotime($orderTimeEnd));
+                $boxesArray[$box->id]['can_order'] = 1;
 			}
 			$boxesArray[$box->id]['timetable'] = $boxOrdersArray;
 		}

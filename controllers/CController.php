@@ -55,7 +55,6 @@ abstract class CController extends Controller
 	 */
 	public function beforeAction($action)
 	{
-		#echo "<pre>";var_dump($this->behaviors());die();
 		if (!Yii::$app->request->isAjax) {
 			$this->initMenu();
 		}
@@ -64,9 +63,7 @@ abstract class CController extends Controller
 
 	public function init()
 	{
-		if (Yii::$app->request->isAjax) {
-			$this->ajaxResult = new AjaxResult();
-		}
+        $this->ajaxResult = new AjaxResult();
 	}
 
 	public function afterAction($action, $result)

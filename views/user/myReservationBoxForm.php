@@ -13,91 +13,31 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\models\OrderSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-<div class="portlet-body">
-	<div class="panel">
-		<div class="panel panel-info">
-			<div class="panel-heading">Ваши заказы</div>
-			<div class="panel-body">
-				<div class="col-xs-12">
-					<?php Pjax::begin([
-						'id' => 'my-services-timetable-pjax',
-						'timeout' => 240000,
-						'enableReplaceState'=>false,
-						'enablePushState'=>false,
-						'linkSelector'=>'a1',
-						'clientOptions' => ['method' => 'POST'],
-					]); ?>
-					<?= GridView::widget([
-						'id' => 'my-services-timetable-grid',
-						'layout' => "{items}\n{pager}\n{summary}",
-						'formatter' => ['class' => 'yii\i18n\Formatter', 'nullDisplay' => '-'],
-						'options' => ['class' => ['table-report-detailed', 'grid-view']],
-						'dataProvider' => $orders,
-						'columns' => [
-							['class' => 'yii\grid\SerialColumn'],
-							[
-								'attribute' => 'service_id',
-								'content' => function ($data) {
-									/** @var $data Order */
-									return $data->service->title;
-								},
-							],
-							[
-								'attribute' => 'box_id',
-								'content' => function ($data) {
-									/** @var $data Order */
-									return $data->box->title;
-								},
-							],
-							[
-								'attribute' => 'date_start',
-								'label' => "Дата",
-								'contentOptions' => ['style' => 'text-align: center'],
-							],
-							[
-								'attribute' => 'time_start',
-								'label' => "Начало",
-								'contentOptions' => ['style' => 'text-align: center'],
-							],
-							[
-								'attribute' => 'time_end',
-								'label' => 'Конец',
-								'contentOptions' => ['style' => 'text-align: center'],
-							],
-							[
-								'attribute' => 'money_cost',
-								'contentOptions' => ['style' => 'text-align: center'],
-							],
-							[
-								'class' => 'yii\grid\ActionColumn',
-								'template' => '{delete}',
-								'contentOptions' => ['style' => 'text-align: center'],
-								'buttons' => [
-									'delete' => function ($url, $model) {
-										/** @var Order $model */
-										return Html::a(OrderHelper::getStatusTextForClient($model->status),
-											'javascript:;', [
-												'title' => 'Отменить заказ',
-												'data-pjax' => false,
-												'class' => 'btn btn-md col-md-12 ' . OrderHelper::getStatusClassForClient($model),
-												'data-action-url' => Url::to(['/site/cancel-my-reservation', 'id' => $model->id]),
-											]);
-									},
-								],
-							],
-						],
-					]); ?>
-					<?php Pjax::end(); ?>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="modal-footer">
-		<div class="form-group">
-			<?= Html::button('Закрыть', ['class' => 'btn grey-mint btn-close', 'data-dismiss' => "modal"]); ?>
-		</div>
-	</div>
+<?php Pjax::begin([
+    'id' => 'my-services-timetable-pjax',
+    'timeout' => 240000,
+    'enableReplaceState'=>false,
+    'enablePushState'=>false,
+    'linkSelector'=>'a',
+    'clientOptions' => ['method' => 'POST'],
+]); ?>
+<div class="panel-body">
+    <?php foreach ($orders->models as $data):?>
+        <div class="user_order_item">
+            <a data-pjax=true class="user_order_delete" title="Отменить заказ" href="<?= Url::to(['/site/cancel-my-reservation', 'id' => $data->id])?>">Отменить</a>
+            <div class="user_order_top">
+                <div><?= $data->date_start?></div>
+                <div><?= date('H:i',strtotime($data->time_start))?></div>
+            </div>
+            <div class="user_order_servisec"><?= $data->service->title?></div>
+            <div class="user_order_bottom">
+                <div class="user_order_master"><?= $data->box->title?></div>
+                <div class="user_order_price">от <?= $data->money_cost?>Грн</div>
+            </div>
+        </div>
+    <?php endforeach;?>
 </div>
+<?php Pjax::end(); ?>
 <script>
 	$("document").ready(function(){
 		$('#my-services-timetable-grid').parents('div#modal-form-ajax').addClass('reload-siteBoxesTimetable');

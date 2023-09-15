@@ -3,7 +3,7 @@ namespace app\rbac;
 
 use app\models\User;
 use app\models\UserSmsQuery;
-use yii\base\Object;
+use yii\base\BaseObject;
 use yii\db\Expression;
 use yii\helpers\Html;
 use yii\web\IdentityInterface;
@@ -17,7 +17,7 @@ use yii\web\IdentityInterface;
  * @property string $smsPhone
  * @property string apiToken
  */
-class UserIdentity extends Object implements IdentityInterface
+class UserIdentity extends BaseObject implements IdentityInterface
 {
 	const ERROR_NONE = 0;
 	const ERROR_USERNAME_INVALID = 1;

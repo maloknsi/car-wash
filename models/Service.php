@@ -7,6 +7,8 @@ use UserService;
  * This is the model class for table "service".
  *
  * @property int $id
+ * @property int $menu_block
+ * @property int $sort
  * @property string $title
  * @property string $description
  * @property string $time_processing
@@ -16,7 +18,10 @@ use UserService;
  */
 class Service extends \yii\db\ActiveRecord
 {
-	public function formName(){
+    /**
+     * @var mixed|null
+     */
+    public function formName(){
 		return 's';
 	}
     /**
@@ -35,6 +40,7 @@ class Service extends \yii\db\ActiveRecord
         return [
             [['title', 'time_processing', 'money_cost'], 'required'],
             [['description'], 'string'],
+            [['menu_block', 'sort'], 'integer'],
             [['time_processing'], 'safe'],
             [['money_cost'], 'number'],
             [['title'], 'string', 'max' => 50],
@@ -48,6 +54,8 @@ class Service extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'menu_block' => '№ Меню',
+            'sort' => 'Сортировка',
             'title' => 'Название',
             'description' => 'Описание',
             'time_processing' => 'Время выполнения',
