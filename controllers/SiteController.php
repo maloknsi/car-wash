@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Box;
 use app\models\Order;
 use app\models\Review;
 use app\models\User;
@@ -182,7 +183,12 @@ class SiteController extends CController
 		$order->load($orderData);
 		$order->date_time_start = date('Y-m-d H:i', strtotime($order->date_start . ' ' . $order->time_start));
 		$order->user_id = \Yii::$app->user->id;
-		return $this->renderAjax('/order/reservationBoxForm', ['order' => $order,]);
+        if (!$order->box_id){
+            $firstBox =  Box::find()->one();
+            $order->box_id = $firstBox->id;
+        }
+        $availableServices = \app\models\Box::getAvailableServices($order->box_id, $order->date_time_start)->models;
+		return $this->renderAjax('/order/reservationBoxForm', ['order' => $order,'availableServices' => $availableServices]);
 	}
 	/**
 	 * @return array

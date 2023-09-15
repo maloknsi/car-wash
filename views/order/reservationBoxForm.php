@@ -12,29 +12,13 @@ use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $order app\models\Order */
+/* @var $availableServices app\models\Service[] */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 <?php if (Yii::$app->user->isGuest): ?>
 	<div class="portlet-body">
-		<div class="panel">
-			<div class="panel panel-danger">
-				<div class="panel-heading">Ошибка</div>
-				<div class="panel-body">
-					<div class="col-xs-12">
-						Только зарегистрированные пользователи могут бронировать время записи.<br>
-						<?= Html::submitButton(
-							'Зарегистрируйтесь',
-							[
-								'title' => 'Записаться',
-								'class' => 'btn-show-modal-form btn btn-success',
-								'data-action-url' => Url::to('/login'),
-							]
-						); ?>
-						, это совсем не долго - нужен только Ваш номер телефона
-					</div>
-				</div>
-			</div>
-		</div>
+        Только зарегистрированные пользователи могут бронировать время записи, это совсем не долго - нужен только Ваш номер телефона<br><br><br>
+        <a href="#" data-action-url = "<?=Url::to('/login')?>" type="submit" class="button big btn-show-modal-form btn btn-success">Войти</a>
 	</div>
 <?php else: ?>
     <?php Pjax::begin(['id' => 'services-timetable-pjax', 'timeout' => 7000, 'enablePushState' => true,'clientOptions' => ['method' => 'POST']]); ?>
@@ -60,7 +44,7 @@ use yii\widgets\Pjax;
         <div class="filter_saller_item">
             <svg class="search_svg"><use xlink:href="#time_time"></use></svg>
             <select id="services" name="Order[service_id]" placeholder = "Вибрать услугу *" class="input" onfocus="this.value=''" onchange="this.blur();">
-                <?php foreach (\app\models\Box::getAvailableServices($order->box_id, $order->date_time_start)->models as $service):?>
+                <?php foreach ($availableServices as $service):?>
                     <option value="<?= $service->id?>"><?= $service->title?></option>
                 <?php endforeach;?>
             </select>

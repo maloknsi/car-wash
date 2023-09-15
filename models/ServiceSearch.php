@@ -63,7 +63,7 @@ class ServiceSearch extends Service
             return $dataProvider;
         }
         // for select Box Available Services
-	    if ($this->date_time_start){
+	    if (false && $this->date_time_start){
 
 	    	if (
 	    		(date('Y-m-d') > date('Y-m-d', strtotime($this->date_time_start))) ||

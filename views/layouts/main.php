@@ -6,6 +6,7 @@
 use app\assets\BootboxAsset;
 use yii\helpers\Html;
 use app\assets\AppAsset;
+use yii\helpers\Url;
 
 AppAsset::register($this);
 BootboxAsset::overrideSystemConfirm();
@@ -44,7 +45,12 @@ $this->title = $this->context->title;
     <h1>Шиномонтаж  на Левоневского, круглосуточно</h1>
     <p>Рихтовка литья, подкачка и замена резины </p>
     <div class="home_btn">
-        <a href="" class="secondary radius icon_buton">Записаться</a>
+        <a href="javascript:;" class="secondary radius icon_buton btn-show-modal-form" title="Записаться" data-action-url="<?= Url::to([
+            'site/get-reservation-box-form',
+            'Order[date_start]' => date('Y-m-d'),
+            'Order[time_start]' => date('H:i'),
+            'Order[box_id]' => 0,
+        ])?>">Записаться</a>
         <a href="" class="simple radius" >Показать на карте</a>
     </div>
 </div>
@@ -53,20 +59,19 @@ $this->title = $this->context->title;
 <div class="order_list_view container">
     <div class="title_data">
         <div class="title_left_box">
-            <div class="title">Записаться <span>на обслуживание</span></div>
-            <a href="" class="secondary radius icon_buton">Календарь</a>
-            <?= kartik\date\DatePicker::widget([
-                'removeButton' => false,
-                'name' => 'site_boxes_timetable_date',
-                'id' => 'site-boxes_timetable_date',
-                'value' => date('Y-m-d'),
-                'type' => kartik\date\DatePicker::TYPE_COMPONENT_APPEND,
-                'options' => ['class' => 'radius icon_buton'],
-                'pluginOptions' => [
-                    'autoclose' => true,
-                    'format' => 'yyyy-mm-dd'
-                ]
-            ]) ?>
+            <div class="title">Записаться
+                <span>на обслуживание</span>
+            </div>
+            <div class="calendar_left">                     
+                <input type="date"
+                       id="site-boxes_timetable_date"
+                       class="input"
+                       name="site_boxes_timetable_date"
+                       value="2023-09-15" min="<?= date('Y-m-d')?>"
+                       max="<?= date('Y-m-d', strtotime('+ 10 days'))?>"
+                >
+                <div class="invalid-feedback"></div>
+            </div>
             <div class="view_data_free">
                 <?php for ($i = 0; $i < 4; $i++):?>
                     <div class="js-select-date" data-value="<?=date('Y-m-d', strtotime('+'.$i.' days'))?>"><?= date('Y-m-d', strtotime('+'.$i.' days'))?> <span>3 места ></span></div>

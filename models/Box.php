@@ -68,10 +68,12 @@ class Box extends \yii\db\ActiveRecord
 	public static function getAvailableServices($boxId,$date)
 	{
 		$searchModel = new ServiceSearch();
-		if ($boxId && $boxId) {
+		if ($boxId) {
 			$searchModel->box_id = $boxId;
-			$searchModel->date_time_start = $date;
 		}
+        if ($date) {
+            $searchModel->date_time_start = $date;
+        }
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
 		return $dataProvider;
