@@ -11,6 +11,7 @@ use yii\helpers\Url;
 AppAsset::register($this);
 BootboxAsset::overrideSystemConfirm();
 $this->registerAssetBundle(skinka\widgets\gritter\GritterAsset::className());
+//$this->registerAssetBundle(AppAsset::className());
 $this->assetManager->bundles['yii\bootstrap\BootstrapAsset']->css = [];
 $this->title = $this->context->title;
 
@@ -22,8 +23,8 @@ $this->title = $this->context->title;
     <meta charset="<?= Yii::$app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/new.css">
+<!--    <link rel="stylesheet" href="/css/style.css">-->
+<!--    <link rel="stylesheet" href="/css/new.css">-->
     <link rel="stylesheet" href="/fonts/fonts.css">
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>

@@ -17,10 +17,13 @@ use yii\web\AssetBundle;
  */
 class AppAsset extends AssetBundle
 {
+    public $sourcePath = '@webroot/css';
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
         'css/main.css',
+        'css/style.css',
+        'css/new.css',
 //        'css/site.css',
     ];
     public $js = [
@@ -34,5 +37,12 @@ class AppAsset extends AssetBundle
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
 	    'app\assets\BootboxAsset',
+    ];
+    public $publishOptions = [
+        'only' => [
+            'js/*.js',
+            'css/*.css',
+        ],
+        'forceCopy' => false,
     ];
 }

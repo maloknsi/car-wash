@@ -35,6 +35,7 @@ use yii\widgets\Pjax;
             <svg class="search_svg"><use xlink:href="#calendar"></use></svg>
             <input name="Order[date_start]" list="brow" value="<?= $order->date_start?>" type="text" onfocus="this.value=''" onchange="this.blur();" placeholder = "Дата" class="input">
             <datalist id="brow">
+                <option value="<?= date('Y-m-d', strtotime($order->date_start))?>">
                 <?php for ($i = 1; $i < 5; $i++):?>
                     <option value="<?= date('Y-m-d', strtotime('+'.$i.' days', strtotime($order->date_start)))?>">
                 <?php endfor;?>
