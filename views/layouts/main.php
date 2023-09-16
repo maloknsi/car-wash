@@ -13,7 +13,7 @@ BootboxAsset::overrideSystemConfirm();
 $this->registerAssetBundle(skinka\widgets\gritter\GritterAsset::className());
 //$this->registerAssetBundle(AppAsset::className());
 $this->assetManager->bundles['yii\bootstrap\BootstrapAsset']->css = [];
-$this->title = $this->context->title;
+$this->title = $this->context->company->title;
 
 ?>
 <?php $this->beginPage() ?>
@@ -38,13 +38,9 @@ $this->title = $this->context->title;
 <?= $this->render('main/header')?>
 <main>
     <!-- если єто главная Хлебны на главной то не выводим -->
-    <ul style="display: none;" class="breadcrumb container">
-        <li><span class="icon small_s"><svg><use xlink:href="#down_arow"></use></svg></span><a href="">Главная</a></li>
-        <li><span class="icon small_s"><svg><use xlink:href="#down_arow"></use></svg></span>Компьютеры</li>
-    </ul>
 <div class="header_box container">
-    <h1>Шиномонтаж  на Левоневского, круглосуточно</h1>
-    <p>Рихтовка литья, подкачка и замена резины </p>
+    <h1><?= $this->context->company->title_short?></h1>
+    <p><?= $this->context->company->description?></p>
     <div class="home_btn">
         <a href="javascript:;" class="secondary radius icon_buton btn-show-modal-form" title="Записаться" data-action-url="<?= Url::to([
             'site/get-reservation-box-form',

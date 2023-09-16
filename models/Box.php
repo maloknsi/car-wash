@@ -74,6 +74,7 @@ class Box extends \yii\db\ActiveRecord
         if ($date) {
             $searchModel->date_time_start = $date;
         }
+        $searchModel->company_id = \Yii::$app->controller->company->id;
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
 		return $dataProvider;

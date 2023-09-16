@@ -11,6 +11,7 @@ use app\helpers\OrderHelper;
  * @property int $service_id
  * @property int $user_id
  * @property int $box_id
+ * @property int $company_id
  * @property string $created_at
  * @property string $updated_at
  * @property string $date_start
@@ -45,7 +46,7 @@ class Order extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['service_id', 'user_id', 'box_id'], 'integer'],
+            [['service_id', 'user_id', 'box_id', 'company_id'], 'integer'],
             [['created_at', 'updated_at', 'date_start', 'time_start', 'time_end', 'date_time_start'], 'safe'],
             [['money_cost'], 'number'],
             [['status'], 'string'],
@@ -70,6 +71,7 @@ class Order extends \yii\db\ActiveRecord
             'service_id' => 'Услуга',
             'user_id' => 'Клиент',
             'box_id' => 'Бокс мойки',
+            'company_id' => 'Компания',
             'created_at' => 'Создано',
             'updated_at' => 'Обновлено',
             'date_start' => 'Назначена дата',
@@ -150,7 +152,9 @@ class Order extends \yii\db\ActiveRecord
 		if (!$dateStart) $dateStart = date('Y-m-d');
 		$boxesArray = [];
 		/** @var Box[] $boxes */
-		$boxes = Box::find()->all();
+		$boxes = Box::find()
+            ->where(['company_id' => \Yii::$app->controller->company->id, 'active' => 1])
+            ->all();
 		foreach ($boxes as $box){
 			$boxesArray[$box->id]['title'] = $box->title;
 			$boxesArray[$box->id]['date_start'] = $dateStart;
@@ -159,7 +163,13 @@ class Order extends \yii\db\ActiveRecord
 			$boxesArray[$box->id]['can_order'] = 0;
 			$boxOrdersArray = [];
 			/** @var Order[] $boxOrders */ //,
-			$boxOrders = Order::find()->where(['box_id'=>$box->id, 'date_start'=>$dateStart, 'status'=>Order::STATUS_BUSY])->orderBy(['time_start'=>SORT_ASC])->all();
+			$boxOrders = Order::find()
+                ->where([
+                    'box_id'=>$box->id,
+                    'date_start'=>$dateStart,
+                    'status'=>Order::STATUS_BUSY
+                ])
+                ->orderBy(['time_start'=>SORT_ASC])->all();
 			// начало записи - начало работы бокса либо текущее время +5минут с округлением до 5 минут в большую сторону
 			$orderTimeStart = $box->time_start;
 			if ($dateStart == date('Y-m-d') && date('H:i:s') > $box->time_start){

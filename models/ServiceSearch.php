@@ -16,13 +16,14 @@ class ServiceSearch extends Service
 	public $service_time_start;
 	public $service_date;
 	public $box_id;
+	public $company_id;
 	/**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id', 'box_id'], 'integer'],
+            [['id', 'box_id', 'company_id'], 'integer'],
             [['money_cost'], 'number'],
             [['date_time_start'], 'string'],
 	        [['title', 'description', 'time_processing', 'date_time_start'], 'safe'],
@@ -98,6 +99,7 @@ class ServiceSearch extends Service
             'id' => $this->id,
             'time_processing' => $this->time_processing,
             'money_cost' => $this->money_cost,
+            'company_id' => $this->company_id,
         ]);
 
         $query->andFilterWhere(['like', 'title', $this->title])

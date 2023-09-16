@@ -198,6 +198,7 @@ class SiteController extends CController
 		$model = new Order();
 		if ($model->load(Yii::$app->getRequest()->post())) {
 			$model->user_id = \Yii::$app->user->id;
+			$model->company_id = \Yii::$app->controller->company->id;
 			$model->money_cost = $model->service->money_cost;
             if ($model->date_time_start) {
                 $model->date_start = date('Y-m-d', strtotime($model->date_time_start));

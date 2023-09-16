@@ -6,7 +6,7 @@ use yii\helpers\Url;
 ?>
 <header>
     <div class="container">
-        <a class="logotype" href=""><img src="/images/template/logo.png" alt="Логотип FIXTIME"></a>
+        <a class="logotype" href=""><img src="/images/company_<?= \Yii::$app->controller->company->id?>.png" alt="Логотип FIXTIME"></a>
         <div id="block_user_guest" class="login clean popup_triger btn-show-modal-form" style="display:<?= Yii::$app->user->isGuest ? 'flex' : 'none' ?>"
              title="Вход"
              data-action-url=<?= Url::to(['/login'])?>>Вход<svg><use xlink:href="#login"></use></svg>

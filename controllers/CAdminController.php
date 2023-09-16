@@ -1,6 +1,7 @@
 <?php
 namespace app\controllers;
 
+use app\components\AjaxResult;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
 use yii\filters\AccessControl;
@@ -44,6 +45,9 @@ abstract class CAdminController extends CController
 			];
 	}
 
+    public function init()
+    {
+    }
 	/**
 	 * @param bool $isModelSearch
 	 * @return ActiveDataProvider | ActiveRecord

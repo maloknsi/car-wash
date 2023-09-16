@@ -1,6 +1,7 @@
 <?php
 namespace app\controllers;
 
+use app\models\Company;
 use app\models\User;
 use app\components\AjaxResult;
 use Yii;
@@ -9,9 +10,11 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 
 abstract class CController extends Controller
 {
+    public $company;
 	/**
 	 * @var array
 	 * хлебные крошки
@@ -64,6 +67,10 @@ abstract class CController extends Controller
 	public function init()
 	{
         $this->ajaxResult = new AjaxResult();
+        // init company
+        $domains = explode('.',Yii::$app->request->headers->get('host'));
+        $this->company = Company::findOne(['alias' => $domains[0]]);
+        if (!$this->company) throw new NotFoundHttpException('The requested page does not exist.');
 	}
 
 	public function afterAction($action, $result)
