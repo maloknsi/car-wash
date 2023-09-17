@@ -12,11 +12,11 @@
             </div>
             <div>
                 <div><!-- позиция 1 -->
-                    <p>Контакты</p>
+                    <p>Контакти</p>
                     <?= $this->context->company->contacts?>
                 </div>
                 <div>
-                    <p>Адрес</p>
+                    <p>Адреса</p>
                     <div><?= nl2br($this->context->company->address)?></div>
                 </div>
             </div>

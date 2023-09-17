@@ -17,8 +17,8 @@ use yii\widgets\Pjax;
 ?>
 <?php if (Yii::$app->user->isGuest): ?>
 	<div class="portlet-body">
-        Только зарегистрированные пользователи могут бронировать время записи, это совсем не долго - нужен только Ваш номер телефона<br><br><br>
-        <a href="#" data-action-url = "<?=Url::to('/login')?>" type="submit" class="button big btn-show-modal-form btn btn-success">Войти</a>
+        Тільки зареєстровані користувачі можуть бронювати час запису, це зовсім не довго - потрібен лише Ваш номер телефону<br><br><br>
+        <a href="#" data-action-url = "<?=Url::to('/login')?>" type="submit" class="button big btn-show-modal-form btn btn-success">Ввійти</a>
 	</div>
 <?php else: ?>
     <?php Pjax::begin(['id' => 'services-timetable-pjax', 'timeout' => 7000, 'enablePushState' => true,'clientOptions' => ['method' => 'POST']]); ?>
@@ -33,38 +33,61 @@ use yii\widgets\Pjax;
     <div class="input-conteiner">
         <div class="filter_saller_item">
             <svg class="search_svg"><use xlink:href="#calendar"></use></svg>
-            <input name="Order[date_start]" list="brow" value="<?= $order->date_start?>" type="text" onfocus="this.value=''" onchange="this.blur();" placeholder = "Дата" class="input">
-            <datalist id="brow">
-                <option value="<?= date('Y-m-d', strtotime($order->date_start))?>">
+            <select id="order-date_start" name="Order[date_start]" class="input" onfocus="this.value=''" onchange="this.blur();">
+                <?php if (date('Y-m-d', strtotime($order->date_start)) > date('Y-m-d')):?>
+                    <option value="<?= date('Y-m-d', strtotime('-1 day', strtotime($order->date_start)))?>">
+                        <?= date('Y-m-d', strtotime('-1 day', strtotime($order->date_start)))?>
+                    </option>
+                <?php endif;?>
+                <option selected value="<?= date('Y-m-d', strtotime($order->date_start))?>">
+                    <?= date('Y-m-d', strtotime($order->date_start))?>
+                </option>
                 <?php for ($i = 1; $i < 5; $i++):?>
-                    <option value="<?= date('Y-m-d', strtotime('+'.$i.' days', strtotime($order->date_start)))?>">
+                <option value="<?= date('Y-m-d', strtotime('+'.$i.' days', strtotime($order->date_start)))?>">
+                    <?= date('Y-m-d', strtotime('+'.$i.' days', strtotime($order->date_start)))?>
+                </option>
                 <?php endfor;?>
-            </datalist>
+            </select>
             <div class="invalid-feedback"></div>
         </div>
         <div class="filter_saller_item">
             <svg class="search_svg"><use xlink:href="#time_time"></use></svg>
-            <select id="services" name="Order[service_id]" placeholder = "Вибрать услугу *" class="input" onfocus="this.value=''" onchange="this.blur();">
+            <select id="order-services" name="Order[service_id]" placeholder = "Вибрать услугу *" class="input" onfocus="this.value=''" onchange="this.blur();">
                 <?php foreach ($availableServices as $service):?>
-                    <option value="<?= $service->id?>"><?= $service->title?></option>
+                    <option <?php if($service->id == $order->service_id):?>selected<?php endif?> value="<?= $service->id?>"><?= $service->title?></option>
                 <?php endforeach;?>
             </select>
             <div class="invalid-feedback"></div>
         </div>
 
         <div class="radio filter-group ">
-            <p class="pdn-left">Время:</p>
-            <?php for ($i = 1; $i < 100; $i = $i+10):?>
-            <div>
-                <input name="Order[time_start]" value="<?= date('H:i', strtotime('+'.$i.' minutes', strtotime($order->time_start)))?>"
-                       type="radio" id="start_time-<?= $i?>" name="radio-group">
-                <label for="start_time-<?= $i?>"><span><?= date('H:i', strtotime('+'.$i.' minutes', strtotime($order->time_start)))?></span></label>
-            </div>
+            <p class="pdn-left">Час:</p>
+            <?php $timeStart = $order->box->time_start;?>
+            <?php if ($order->time_start):?>
+                <?php $timeStart = date('H:00',strtotime($order->time_start));?>
+                <?php $timeValue = date('H:i', strtotime('-10 minutes', strtotime($timeStart)));?>
+                <div>
+                    <input value="<?= $timeValue?>"
+                           type="radio" id="start_time" class="js-order-start_time">
+                    <label for="start_time"><span><?= $timeValue?></span></label>
+                </div>
+            <?php endif;?>
+            <?php for ($i = 0; $i < 13; $i++):?>
+                <?php $timeValue = date('H:i', strtotime('+'.$i.' hours', strtotime($timeStart)));?>
+                <?php if ($order->time_start):?>
+                    <?php $timeValue = date('H:i', strtotime('+'.$i.'0 minutes', strtotime($timeStart)));?>
+                <?php endif;?>
+                <div>
+                    <input name="Order[time_start]" value="<?= $timeValue?>"
+                           <?php if($order->time_start == $timeValue):?>checked<?php endif?>
+                           type="radio" id="start_time-<?= $i?>" class="js-order-start_time">
+                    <label for="start_time-<?= $i?>"><span><?= $timeValue?></span></label>
+                </div>
             <?php endfor;?>
             <div class="invalid-feedback"></div>
         </div>
         <div class="form-auth field-loginform-password required">
-            <input type="text" id="loginform-password" class="input" name="Order[description]" value="" placeholder="Описание (марка, цвет авто)*" aria-required="true">
+            <input type="text" id="loginform-password" class="input" name="Order[description]" value="" placeholder="Довідка (марка, колір авто)*" aria-required="true">
             <div class="invalid-feedback"></div>
         </div>
     </div>
@@ -72,23 +95,27 @@ use yii\widgets\Pjax;
     <BR>
     <?= $form->field($order, 'id')->hiddenInput()->label(''); ?>
     <?= $form->field($order, 'box_id')->hiddenInput(['id'=>'order-box_id'])->label(''); ?>
-    <button type="submit" class="button big" name="login-button">Забронировать</button>
+    <button type="submit" class="button big" name="login-button">Забронювати</button>
     <?php ActiveForm::end(); ?>
-    <?php Pjax::end(); ?>
-<?php endif; ?>
-<?php
-$script = <<< JS
+    <?php
+    $script = <<< JS
 	$("document").ready(function(){
-		$('#order-date_time_start').on('change', function () {
+		$('#order-date_start, #order-services, .js-order-start_time').on('change', function () {
 			$.pjax.reload({container:'#services-timetable-pjax', url: "/site/get-reservation-box-form", 'push':false, 'replace': false});
 		});
 		$('#services-timetable-pjax').on('pjax:beforeSend', function (e, jqXHR, settings) {
-			settings.url = settings.url + '&s[date_time_start]='+$('#order-date_time_start').val()+'&s[box_id]='+$('#order-box_id').val();
+			settings.url = '/site/get-reservation-box-form?_pjax=services-timetable-pjax'
+			+'&Order[date_start]='+$('#order-date_start').val()
+			+'&Order[service_id]='+$('#order-services').val()
+			+'&Order[time_start]='+$('.js-order-start_time:checked').val()
+			+'&Order[box_id]='+$('#order-box_id').val();
 		});
     });
 JS;
-$this->registerJs($script);
-?>
+    $this->registerJs($script);
+    ?>
+    <?php Pjax::end(); ?>
+<?php endif; ?>
 <script>
 	$('#my-services-timetable-grid').parents('div#modal-form-ajax').addClass('reload-siteBoxesTimetable');
 </script>

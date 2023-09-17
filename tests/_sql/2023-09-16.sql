@@ -37,3 +37,5 @@ ALTER TABLE `service` ADD CONSTRAINT `fk-service-company_id` FOREIGN KEY (`compa
 ALTER TABLE `user` ADD CONSTRAINT `fk-user-company_id` FOREIGN KEY (`company_id`) REFERENCES `company` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE `user_blocking` ADD CONSTRAINT `fk-user_blocking-company_id` FOREIGN KEY (`company_id`) REFERENCES `company` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE `user_review` ADD CONSTRAINT `fk-user_review-company_id` FOREIGN KEY (`company_id`) REFERENCES `company` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `company` ADD COLUMN `google_link` varchar(255) NULL AFTER `address`;

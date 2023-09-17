@@ -181,7 +181,9 @@ class SiteController extends CController
 		$orderData = Yii::$app->getRequest()->get();
 		$order = new Order();
 		$order->load($orderData);
-		$order->date_time_start = date('Y-m-d H:i', strtotime($order->date_start . ' ' . $order->time_start));
+        if ($order->date_start && $order->time_start){
+            $order->date_time_start = date('Y-m-d H:i', strtotime($order->date_start . ' ' . $order->time_start));
+        }
 		$order->user_id = \Yii::$app->user->id;
         if (!$order->box_id){
             $firstBox =  Box::find()->one();

@@ -19,9 +19,9 @@ use app\widgets\SiteServicesWidget;
                         <?php endforeach;?>
                     </div>
                 <?php elseif ($item->money_cost):?>
-                    <div class="prise"><span>от <?= intval($item->money_cost)?>Грн</span></div>
+                    <div class="prise"><span>від <?= intval($item->money_cost)?>Грн</span></div>
                 <?php endif;?>
-                <div class="name"><?= $item->title?> <?php if ($item->time_processing):?><span class="name_time">сделаем за ~<?= date("H:i",strtotime($item->time_processing)) ?></span><?php endif?></div>
+                <div class="name"><?= $item->title?> <?php if ($item->time_processing):?><span class="name_time">зробимо за ~<?= date("H:i",strtotime($item->time_processing)) ?></span><?php endif?></div>
             </a>
         <?php endforeach;?>
     </div>

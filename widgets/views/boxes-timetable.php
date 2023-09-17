@@ -27,7 +27,7 @@ use yii\widgets\Pjax;
                         <div class="status_text">Занято</div>
                     </a>
                 <?php else:?>
-                    <a href="javascript:;" title="Записаться" class="status_item btn-show-modal-form" data-action-url="<?= Url::to([
+                    <a href="javascript:;" title="Записатися" class="status_item btn-show-modal-form" data-action-url="<?= Url::to([
                         'site/get-reservation-box-form',
                         'Order[date_start]' => $boxTimetable['date_start'],
                         'Order[time_start]' => $timetable['time_start'],
@@ -40,13 +40,13 @@ use yii\widgets\Pjax;
             <?php endforeach; ?>
         <?php endif; ?>
         <?php if ($boxTimetable['can_order']): ?>
-            <p><span>Свободно</span> с <?= $boxTimetable['time_start']?> по <?= $boxTimetable['time_end']?></p>
-            <a href="javascript:;" title="Записаться" class="secondary radius icon_buton btn-show-modal-form" data-action-url="<?= Url::to([
+            <p><span>Вільно</span> с <?= $boxTimetable['time_start']?> по <?= $boxTimetable['time_end']?></p>
+            <a href="javascript:;" title="Записатися" class="secondary radius icon_buton btn-show-modal-form" data-action-url="<?= Url::to([
                 'site/get-reservation-box-form',
                 'Order[date_start]' => $boxTimetable['date_start'],
                 'Order[time_start]' => $boxTimetable['time_start'],
                 'Order[box_id]' => $boxId,
-            ])?>">Записаться</a>
+            ])?>">Записатися</a>
         <?php endif; ?>
     </div>
 <?php endforeach; ?>

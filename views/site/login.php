@@ -28,6 +28,6 @@ use yii\helpers\Url;
     </div>
 </div>
 <BR>
-<button type="submit" class="button big" name="login-button" value="<?= Url::to(['/login'])?>">Войти</button>
+<button type="submit" class="button big" name="login-button" value="<?= Url::to(['/login'])?>">Ввійти</button>
 <?php ActiveForm::end(); ?>
 

@@ -31,8 +31,8 @@ use yii\widgets\Pjax;
 									]); ?>
 								<?php else:?>
 									<?= Html::button(($timetable['time_start'] . ' - ' . $timetable['time_end']
-										. ' - Записаться'), [
-										'title' => 'Записаться',
+										. ' - Записатися'), [
+										'title' => 'Записатися',
 										'class' => 'btn-show-modal-form btn btn-success',
 										'data-action-url' => Url::to([
 											'site/get-reservation-box-form',
